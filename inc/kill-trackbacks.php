@@ -2,10 +2,9 @@
 /**
  * Kill Trackbacks
  *
- * @package      CoreFunctionality
+ * @package      RKOCoreFunctionality
  * @author       Yuriy Lysyuk
  * @since        1.0.0
- * @license      GPL-2.0+
 **/
 
 /*
@@ -20,10 +19,7 @@ Author URI: http://pmg.co/people/chris
 add_filter( 'wp_headers', 'pmg_kt_filter_headers', 10, 1 );
 function pmg_kt_filter_headers( $headers )
 {
-	if( isset( $headers['X-Pingback'] ) )
-	{
-		unset( $headers['X-Pingback'] );
-	}
+	unset( $headers['X-Pingback'] );
 	return $headers;
 }
 
@@ -59,6 +55,8 @@ remove_action( 'wp_head', 'rsd_link' );
 add_filter( 'pre_update_option_enable_xmlrpc', '__return_false' );
 add_filter( 'pre_option_enable_xmlrpc', '__return_zero' );
 
+add_filter( 'xmlrpc_enabled', '__return_false' );
+
 // Disable XMLRPC call
 add_action( 'xmlrpc_call', 'pmg_kt_kill_xmlrpc' );
 function pmg_kt_kill_xmlrpc( $action )
@@ -77,9 +75,9 @@ function pmg_kt_kill_xmlrpc( $action )
  * Remove wrong work metods XML-RPC Pingback
  */
 
-function etidni_block_xmlrpc_attacks( $methods ) {
+function rko_block_xmlrpc_attacks( $methods ) {
    unset( $methods['pingback.ping'] );
    unset( $methods['pingback.extensions.getPingbacks'] );
    return $methods;
 }
-add_filter( 'xmlrpc_methods', 'etidni_block_xmlrpc_attacks' );
+add_filter( 'xmlrpc_methods', 'rko_block_xmlrpc_attacks' );
