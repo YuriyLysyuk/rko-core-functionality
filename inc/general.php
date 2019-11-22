@@ -2,10 +2,9 @@
 /**
  * General
  *
- * @package      CoreFunctionality
+ * @package      RKOCoreFunctionality
  * @author       Yuriy Lysyuk
  * @since        1.0.0
- * @license      GPL-2.0+
 **/
 
 /**
@@ -27,6 +26,9 @@ function ea_dont_update_core_func_plugin( $r, $url ) {
     return $r;
  }
 add_filter( 'http_request_args', 'ea_dont_update_core_func_plugin', 5, 2 );
+
+// Don't let WPSEO metabox be high priority
+add_filter( 'wpseo_metabox_prio', function(){ return 'low'; } );
 
 /**
  * Remove WPSEO Notifications

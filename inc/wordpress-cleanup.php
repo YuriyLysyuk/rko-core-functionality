@@ -2,10 +2,9 @@
 /**
  * WordPress Cleanup
  *
- * @package      CoreFunctionality
+ * @package      RKOCoreFunctionality
  * @author       Yuriy Lysyuk
  * @since        1.0.0
- * @license      GPL-2.0+
 **/
 
 /**
@@ -48,16 +47,16 @@ add_action( 'admin_menu' , 'jb_remove_post_custom_fields_now' );
  * Убираем атрибуты type у загружаемых стилей и скриптов
  *
  */
-	function etidni_remove_type_attr($tag, $handle) {
+	function rko_remove_type_attr($tag, $handle) {
 		return preg_replace( "/type=['\"]text\/(javascript|css)['\"]/", '', $tag );
 	}
-	add_filter('style_loader_tag', 'etidni_remove_type_attr', 10, 2);
-	add_filter('script_loader_tag', 'etidni_remove_type_attr', 10, 2);
+	add_filter('style_loader_tag', 'rko_remove_type_attr', 10, 2);
+	add_filter('script_loader_tag', 'rko_remove_type_attr', 10, 2);
 
 /**
  *  Disable emoji
  */
-function etidni_disable_emojis() {
+function rko_disable_emojis() {
   remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
   remove_action( 'wp_print_styles', 'print_emoji_styles' );
   remove_action( 'admin_print_scripts', 'print_emoji_detection_script' );
@@ -66,12 +65,12 @@ function etidni_disable_emojis() {
   remove_filter( 'comment_text_rss', 'wp_staticize_emoji' );
   remove_filter( 'wp_mail', 'wp_staticize_emoji_for_email' );
  
-  add_filter( 'tiny_mce_plugins', 'etidni_disable_emojis_tinymce' );
-  add_filter( 'wp_resource_hints', 'etidni_disable_emojis_remove_dns_prefetch', 10, 2 );
+  add_filter( 'tiny_mce_plugins', 'rko_disable_emojis_tinymce' );
+  add_filter( 'wp_resource_hints', 'rko_disable_emojis_remove_dns_prefetch', 10, 2 );
 }
- add_action( 'init', 'etidni_disable_emojis' );
+add_action( 'init', 'rko_disable_emojis' );
 
-function etidni_disable_emojis_tinymce( $plugins ) {
+function rko_disable_emojis_tinymce( $plugins ) {
   if ( is_array( $plugins ) ) {
     return array_diff( $plugins, array( 'wpemoji' ) );
   } else {
@@ -79,7 +78,7 @@ function etidni_disable_emojis_tinymce( $plugins ) {
   }
 }
  
-function etidni_disable_emojis_remove_dns_prefetch( $urls, $relation_type ) {
+function rko_disable_emojis_remove_dns_prefetch( $urls, $relation_type ) {
   if ( 'dns-prefetch' == $relation_type ) {
     /** This filter is documented in wp-includes/formatting.php */
     $emoji_svg_url = apply_filters( 'emoji_svg_url', 'https://s.w.org/images/core/emoji/11/svg/' );
