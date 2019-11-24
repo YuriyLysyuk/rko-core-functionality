@@ -2,12 +2,12 @@
 /**
  * Plugin Name: RKO Core Functionality
  * Description: This contains all your site's core functionality so that it is theme independent. <strong>It should always be activated</strong>.
- * Version:     1.0.0
+ * Version:     1.0.3.2
  * Author:     Yuriy Lysyuk
  * Bitbucket Plugin URI: https://bitbucket.org/lysyuk-y/rko-core-functionality
  *
  * @package    RKOCoreFunctionality
- * @since      1.0.0
+ * @since      1.0.3.2
  * @copyright  Copyright (c) 2019, Yuriy Lysyuk
  */
 
@@ -18,6 +18,6 @@ require_once( YL_DIR . '/inc/general.php' );
 require_once( YL_DIR . '/inc/wordpress-cleanup.php' );
 require_once( YL_DIR . '/inc/kill-trackbacks.php' );
 require_once( YL_DIR . '/inc/seo.php' );
+require_once( YL_DIR . '/inc/custom-toc.php' );
 //require_once( YL_DIR . '/inc/login.php' );
 //require_once( YL_DIR . '/inc/custom-html-widget.php' );
-//require_once( YL_DIR . '/inc/custom-toc.php' );
