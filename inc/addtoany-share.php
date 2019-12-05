@@ -4,7 +4,7 @@
  *
  * @package      RKOCoreFunctionality
  * @author       Yuriy Lysyuk
- * @since        1.0.5
+ * @since        1.1.0
 **/
 
 /** 
@@ -15,6 +15,12 @@
 function rkocf_addtoany_share_kit() {
 	
 	if ( function_exists( 'ADDTOANY_SHARE_SAVE_KIT' ) ) {
+		global $post;
+
+		// Скрываем вывод иконок шаринга, если они отключены в админке
+		$sharing_disabled = get_post_meta( $post->ID, 'sharing_disabled', true );
+		if($sharing_disabled) return;
+
 		ADDTOANY_SHARE_SAVE_KIT();
 	}
 
