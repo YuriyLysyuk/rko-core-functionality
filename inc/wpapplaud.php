@@ -4,7 +4,7 @@
  *
  * @package      RKOCoreFunctionality
  * @author       Yuriy Lysyuk
- * @since        1.0.5
+ * @since        1.1.0
 **/
 
 /** 
