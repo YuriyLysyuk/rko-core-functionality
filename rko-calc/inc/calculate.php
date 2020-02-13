@@ -65,7 +65,8 @@ function calculate_range_fee($userParams, $tariffOptions, $context = '')
       // Комиссия указана в %, переводим % в число
       $condCostPercentToNumber = $cond['cost'] / 100;
       // Минимальная комиссия
-      $minFee = $cond['min_cost'];
+      // Убрал учет минимальной комиссии, потому что переводы идут не одним платежом, и расчет для общего объема переводов не актуален
+      // $minFee = $cond['min_cost'];
       // Вычисленная комиссия на текущей итерации
       $currentFee = 0;
       $range = round($cond['to'] - $cond['from']);
@@ -79,11 +80,11 @@ function calculate_range_fee($userParams, $tariffOptions, $context = '')
       ) {
         $currentFee = $userValue * $condCostPercentToNumber;
         if ($currentFee) {
-          if ($currentFee > $minFee) {
-            $calculatedFee += $currentFee;
-          } else {
-            $calculatedFee += $minFee;
-          }
+          // if ($currentFee > $minFee) {
+          $calculatedFee += $currentFee;
+          // } else {
+          // $calculatedFee += $minFee;
+          // }
         }
 
         $userValue = 0;
@@ -101,11 +102,11 @@ function calculate_range_fee($userParams, $tariffOptions, $context = '')
         } else {
           $currentFee = $userValue * $condCostPercentToNumber;
           if ($currentFee) {
-            if ($currentFee > $minFee) {
-              $calculatedFee += $currentFee;
-            } else {
-              $calculatedFee += $minFee;
-            }
+            // if ($currentFee > $minFee) {
+            $calculatedFee += $currentFee;
+            // } else {
+            // $calculatedFee += $minFee;
+            // }
           }
 
           $userValue = 0;
