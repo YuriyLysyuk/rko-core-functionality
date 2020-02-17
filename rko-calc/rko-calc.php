@@ -22,6 +22,9 @@ require_once YL_DIR . '/rko-calc/inc/functions.php';
 // Подключаем функции для получения данных о тарифах
 require_once YL_DIR . '/rko-calc/inc/calculate.php';
 
+// Функции для админки
+require_once YL_DIR . '/rko-calc/inc/admin.php';
+
 function rko_calc()
 {
   // Получаем параметры пользовательского запроса
