@@ -21,27 +21,6 @@ function calculate_service_cost($tariffOptions)
 }
 
 /**
- *  Вычисляем стоимость поступления денег от юр. лиц и ИП на счет
- *	*	в месяц
- */
-function calculate_income_cost($userParams, $tariffOptions)
-{
-  if (empty($userParams['income'])) {
-    return 0;
-  }
-
-  $calculatedIncomeCost = 0;
-  // Получаем объем поступлений от юр. лиц и ИП, которые ввел пользователь
-  $userIncome = $userParams['income'];
-  // Переводим величину комиссии из процентов в число
-  $incomeCostFee = $tariffOptions['income_cost'] / 100;
-
-  $calculatedIncomeCost = $userIncome * $incomeCostFee;
-
-  return $calculatedIncomeCost;
-}
-
-/**
  *  Функция для вычисления комиссий с диапазоном условий
  *  * в месяц
  */
@@ -186,14 +165,9 @@ function calculate($userParams = false, $tariffOptions = false)
   // Стоимость обслуживания счета
   $calculated['service'] = calculate_service_cost($tariffOptions);
 
-  // Стоимость поступления денег от юр. лиц и ИП на счет
-  $calculated['income_cost'] = calculate_income_cost(
-    $userParams,
-    $tariffOptions
-  );
-
   // Считаем комиссию по опциям с диапазонами условий
   $rangeFeeContext = [
+    'income',
     'personal_transfer',
     'people_transfer',
     'get_atm',
