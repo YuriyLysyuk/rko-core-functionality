@@ -32,6 +32,7 @@ function rko_calc()
 
   // Получаем все доступные тарифы
   $allTariffObjects = get_posts([
+    'numberposts' => -1,
     'post_type' => 'tariffs'
   ]);
 
