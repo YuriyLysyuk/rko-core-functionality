@@ -37,13 +37,28 @@ function calculate_range_fee($userParams, $tariffOptions, $context = '')
   // Объем переводов, которые ввел пользователь
   $userValue = $userParams[$context];
 
-  // Если расчет нужен для ООО и для ООО заданы отдельные условия
-  if ($userParams['ooo'] && isset($tariffOptions[$context]['same_for_ooo']) && !$tariffOptions[$context]['same_for_ooo']) {
-    // Получаем условия по тарифу для ООО
-    $tariffOptionsContextCond = $tariffOptions[$context]['cond_ooo'];
+  if ($userParams['ooo']) {
+
+    // Если расчет нужен для ООО и для ООО заданы отдельные условия
+    if (isset($tariffOptions[$context]['same_for_ooo']) && !$tariffOptions[$context]['same_for_ooo']) {
+      // Получаем условия по тарифу для ООО
+      $tariffOptionsContextCond = $tariffOptions[$context]['cond_ooo'];
+    } else {
+      // Получаем условия по тарифу для ИП, которые такие же как и для ООО
+      $tariffOptionsContextCond = $tariffOptions[$context]['cond'];
+    }
+
   } else {
-    // Получаем условия по тарифу для ИП, которые такие же как и для ООО
-    $tariffOptionsContextCond = $tariffOptions[$context]['cond'];
+
+    // Если расчет для ИП, мы обсчитываем стоимость перевода на личный счет и условия переводов на личный счет такие же как для переводов на счета других физ. лиц
+    if ($context === 'personal_transfer' && isset($tariffOptions['personal_transfer_same_as_people_transfer']) && $tariffOptions['personal_transfer_same_as_people_transfer']) {
+      // Получаем условия переводов на счета других физ. лиц
+      $tariffOptionsContextCond = $tariffOptions['people_transfer']['cond'];
+    } else {
+      // Иначе получаем отдельно заданные условия
+      $tariffOptionsContextCond = $tariffOptions[$context]['cond'];
+    }
+
   }
 
   if ($tariffOptionsContextCond) {
