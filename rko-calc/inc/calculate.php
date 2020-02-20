@@ -36,8 +36,15 @@ function calculate_range_fee($userParams, $tariffOptions, $context = '')
   $range = 0;
   // Объем переводов, которые ввел пользователь
   $userValue = $userParams[$context];
-  // Получаем условия по тарифу
-  $tariffOptionsContextCond = $tariffOptions[$context]['cond'];
+
+  // Если расчет нужен для ООО и для ООО заданы отдельные условия
+  if ($userParams['ooo'] && isset($tariffOptions[$context]['same_for_ooo']) && !$tariffOptions[$context]['same_for_ooo']) {
+    // Получаем условия по тарифу для ООО
+    $tariffOptionsContextCond = $tariffOptions[$context]['cond_ooo'];
+  } else {
+    // Получаем условия по тарифу для ИП, которые такие же как и для ООО
+    $tariffOptionsContextCond = $tariffOptions[$context]['cond'];
+  }
 
   if ($tariffOptionsContextCond) {
     foreach ($tariffOptionsContextCond as $cond) {

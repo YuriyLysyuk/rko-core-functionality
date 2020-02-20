@@ -24,6 +24,8 @@ function get_user_params()
 		'put_cashbox' => 0,
 		'corp_card' => false,
 		'sms' => false
+    // ooo - Если ИП: false, если ООО: true
+    'ooo' => 0,
   ];
 
   echo '<pre>';
