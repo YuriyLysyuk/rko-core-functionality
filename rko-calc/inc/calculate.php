@@ -49,6 +49,14 @@ function get_tariff_options_context_cond($userParams, $tariffOptions, $context)
     ) {
       // Получаем условия переводов на счета других физ. лиц
       $tariffOptionsContextCond = $tariffOptions['people_transfer']['cond'];
+    } elseif (
+      // Если расчет для получения или внесения наличных в кассе банка, а кассы в банке нет — обнуляем условия
+      ($context === 'get_cashbox' || $context === 'put_cashbox') &&
+      isset($tariffOptions['have_cashbox']) &&
+      !$tariffOptions['have_cashbox']
+    ) {
+      // Иначе получаем отдельно заданные условия
+      $tariffOptionsContextCond = false;
     } else {
       // Иначе получаем отдельно заданные условия
       $tariffOptionsContextCond = $tariffOptions[$context]['cond'];
