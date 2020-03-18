@@ -86,3 +86,10 @@ function rko_calc()
   }
   // ea_pp($tariff);
 }
+
+add_action('rest_api_init', function () {
+  register_rest_route('rko-calc/v1', '/calculate/', array(
+    'methods' => WP_REST_Server::READABLE,
+    'callback' => 'rko_calc'
+  ));
+});
