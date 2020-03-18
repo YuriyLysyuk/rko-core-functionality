@@ -47,6 +47,9 @@ function get_tariff_options($tariffObject = false)
 
   $tariffOptions = [];
 
+  // ID тарифа
+  $tariffOptions['id'] = $tariffObject->ID;
+
   // Имя тарифа
   $tariffOptions['name'] = $tariffObject->post_title;
 
