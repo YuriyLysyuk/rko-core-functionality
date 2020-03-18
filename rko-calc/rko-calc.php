@@ -47,8 +47,14 @@ require_once YL_DIR . '/rko-calc/inc/calculate.php';
 // Функции для админки
 require_once YL_DIR . '/rko-calc/inc/admin.php';
 
-function rko_calc()
+function rko_calc($request)
 {
+  $response = [];
+
+  // $response = $request->get_params();
+
+  // $param = $request['income'];
+
   // Получаем параметры пользовательского запроса
   $userParams = get_user_params();
 
@@ -74,17 +80,9 @@ function rko_calc()
   }
 
   // Сортируем тарифы (по умолчанию сортируем по 'calculated_sum' по возрастанию)
-  $tariffs = sort_tariffs($tariffs);
+  $response = sort_tariffs($tariffs);
 
-  foreach ($tariffs as $tariff) {
-    echo '<pre style="background-color:skyblue;">';
-    echo $tariff['options']['name'] . ': ' . $tariff['calculated_sum'];
-    echo '</pre>';
-    echo '<pre>';
-    print_r($tariff['calculated']);
-    echo '</pre>';
-  }
-  // ea_pp($tariff);
+  return rest_ensure_response($response);
 }
 
 add_action('rest_api_init', function () {

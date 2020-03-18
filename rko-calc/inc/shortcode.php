@@ -23,8 +23,8 @@ function rko_calc_shortcode()
     </div>
   ';
 
-  // return $form;
-  rko_calc(1);
+  return $form;
+  // rko_calc(1);
 }
 add_shortcode('rko_calc', 'rko_calc_shortcode');
 
