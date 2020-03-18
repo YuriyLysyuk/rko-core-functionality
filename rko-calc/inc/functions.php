@@ -117,6 +117,37 @@ function get_all_tariff_options()
 }
 
 /**
+ * Запускаем обновление данных в JSON файле по тарифам при сохранении записи с тарифом или банком или переносе ее в корзину
+ *
+ */
+add_action('save_post_tariffs', 'update_json_all_tariff_options', 10, 3);
+add_action('save_post_banks', 'update_json_all_tariff_options', 10, 3);
+
+function update_json_all_tariff_options($post_id, $post, $update)
+{
+  // Если это автосохранение — ничего не делаем
+  if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+    return;
+  }
+
+  // Создаем пустой файловый маркер на обновление JSON файла с данными по тарифам
+  $fp = fopen(JSON_ALL_TARIFF_OPTIONS_NEED_UPDATE_PATH, "w+");
+  // Закрываем файл
+  fclose($fp);
+
+  // Проверяем что запись опубликована
+  if ($post->post_status == "publish") {
+    // Запускаем обновление JSON файла с тарифами после сохранения данных в ACF
+    add_action('acf/save_post', 'get_all_tariff_options', 20);
+  }
+  // Проверяем что запись перемещена в корзину
+  if ($post->post_status == "trash") {
+    // Запускаем обновление JSON файла с тарифами
+    get_all_tariff_options();
+  }
+}
+
+/**
  * Сортирует массив всех тарифов
  *
  * @param   array   $tariffs    Массив для сортировки
