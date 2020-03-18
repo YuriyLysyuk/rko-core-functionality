@@ -52,11 +52,8 @@ function rko_calc()
   // Получаем параметры пользовательского запроса
   $tariff['user_params'] = get_user_params();
 
-  // Получаем все доступные тарифы
-  $allTariffObjects = get_posts([
-    'numberposts' => -1,
-    'post_type' => 'tariffs'
-  ]);
+  // Получаем данные каждого тарифа и конструируем ассоциативный массив
+  $allTariffOptions = get_all_tariff_options();
 
   // Основной цикл
   foreach ($allTariffObjects as $tariffObject) {

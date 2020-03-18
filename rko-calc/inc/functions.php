@@ -67,6 +67,56 @@ function get_tariff_options($tariffObject = false)
 }
 
 /**
+ * Возвращает массив всех тарифов со всеми параметрами
+ *
+ */
+function get_all_tariff_options()
+{
+  $allTariffOptions = [];
+
+  // Статичные данные о тарифах храняться в файле JSON
+  // Если файл с данными по тарифам существует и нет маркерного файла на обновление
+  if (
+    file_exists(JSON_ALL_TARIFF_OPTIONS_PATH) &&
+    !file_exists(JSON_ALL_TARIFF_OPTIONS_NEED_UPDATE_PATH)
+  ) {
+    // Открываем JSON с данными по тарифам
+    $allTariffOptionsJson = file_get_contents(JSON_ALL_TARIFF_OPTIONS_PATH);
+    // Декодируем данные по тарифам из JSON
+    $allTariffOptions = json_decode($allTariffOptionsJson, true);
+  } else {
+    // Если файла с данными по тарифам нет или есть маркерный файл на обновление...
+
+    // Получаем все доступные тарифы
+    $allTariffObjects = get_posts([
+      'numberposts' => -1,
+      'post_type' => 'tariffs'
+    ]);
+
+    foreach ($allTariffObjects as $tariffObject) {
+      // Получаем данные каждого тарифа и конструируем ассоциативный массив
+      $allTariffOptions[] = get_tariff_options($tariffObject);
+    }
+
+    // Кодируем строку в JSON
+    $allTariffOptionsJson = json_encode(
+      $allTariffOptions,
+      JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK
+    );
+
+    // Сохраняем данные по тарифам в файл json
+    atomicWrite(JSON_ALL_TARIFF_OPTIONS_PATH, $allTariffOptionsJson);
+
+    // Удаляем маркерный файл
+    if (file_exists(JSON_ALL_TARIFF_OPTIONS_NEED_UPDATE_PATH)) {
+      @unlink(JSON_ALL_TARIFF_OPTIONS_NEED_UPDATE_PATH);
+    }
+  }
+
+  return $allTariffOptions;
+}
+
+/**
  * Сортирует массив всех тарифов
  *
  * @param   array   $tariffs    Массив для сортировки
