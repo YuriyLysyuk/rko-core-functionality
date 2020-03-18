@@ -24,13 +24,13 @@ add_filter('acf/settings/load_json', function ($paths) {
 // Добавляем шорткод для вывода калькулятора на странице
 require_once YL_DIR . '/rko-calc/inc/shortcode.php';
 
-// Подключаем функции для получения данных о тарифах
+// Подключаем функции для получения значений пользовательского запроса
 require_once YL_DIR . '/rko-calc/inc/get-user-params.php';
 
 // Подключаем функции для получения данных о тарифах
 require_once YL_DIR . '/rko-calc/inc/functions.php';
 
-// Подключаем функции для получения данных о тарифах
+// Подключаем функции для вычисления стоимости использования тарифа
 require_once YL_DIR . '/rko-calc/inc/calculate.php';
 
 // Функции для админки

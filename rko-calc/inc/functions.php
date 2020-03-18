@@ -36,7 +36,7 @@ function get_bank_options($bankObject = false)
 }
 
 /**
- * Возвращает массив тарифов со всеми параметрами
+ * Возвращает массив тарифа со всеми параметрами
  *
  */
 function get_tariff_options($tariffObject = false)
