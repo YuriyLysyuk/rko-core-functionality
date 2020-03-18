@@ -27,3 +27,27 @@ function rko_calc_shortcode()
   rko_calc(1);
 }
 add_shortcode('rko_calc', 'rko_calc_shortcode');
+
+/**
+ * Подключаем скрипты для шорткода
+ *
+ */
+function rko_calc_rest_api_scripts()
+{
+  global $post;
+  // Подключаем скрипт только если на странице есть шорткод
+  if (has_shortcode($post->post_content, "rko_calc")) {
+    wp_enqueue_script(
+      'rko-calc',
+      plugins_url('assets/rko-calc.js', dirname(__FILE__)),
+      array('jquery'),
+      false,
+      true
+    );
+    wp_localize_script('rko-calc', 'rkoCalc', array(
+      'restURL' => esc_url_raw(rest_url()),
+      'restNonce' => wp_create_nonce('wp_rest')
+    ));
+  }
+}
+add_action('wp_enqueue_scripts', 'rko_calc_rest_api_scripts');
