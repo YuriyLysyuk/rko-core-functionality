@@ -50,21 +50,18 @@ require_once YL_DIR . '/rko-calc/inc/admin.php';
 function rko_calc()
 {
   // Получаем параметры пользовательского запроса
-  $tariff['user_params'] = get_user_params();
+  $userParams = get_user_params();
 
   // Получаем данные каждого тарифа и конструируем ассоциативный массив
   $allTariffOptions = get_all_tariff_options();
 
   // Основной цикл
-  foreach ($allTariffObjects as $tariffObject) {
-    // Получаем данные каждого тарифа и конструируем ассоциативный массив
-    $tariff['options'] = get_tariff_options($tariffObject);
+  foreach ($allTariffOptions as $tariffOptions) {
+    // ID тарифа
+    $tariff['id'] = $tariffOptions['id'];
 
     // Вычисляем стоимость облуживания по каждому пункту тарифа
-    $tariff['calculated'] = calculate(
-      $tariff['user_params'],
-      $tariff['options']
-    );
+    $tariff['calculated'] = calculate($userParams, $tariffOptions);
 
     // Вычисляем общую стоимость обслуживания по тарифу
     $tariff['calculated_sum'] = 0;
