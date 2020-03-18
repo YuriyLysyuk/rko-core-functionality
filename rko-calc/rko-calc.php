@@ -10,6 +10,17 @@
 //  Регистрируем произвольные типы данных
 require_once YL_DIR . '/rko-calc/inc/register-cpt.php';
 
+// Change ACF Local JSON save location to /acf folder inside this plugin
+add_filter('acf/settings/save_json', function () {
+  return YL_DIR . '/rko-calc/acf';
+});
+
+// Include the /acf folder in the places to look for ACF Local JSON files
+add_filter('acf/settings/load_json', function ($paths) {
+  $paths[] = YL_DIR . '/rko-calc/acf';
+  return $paths;
+});
+
 // Добавляем шорткод для вывода калькулятора на странице
 require_once YL_DIR . '/rko-calc/inc/shortcode.php';
 
