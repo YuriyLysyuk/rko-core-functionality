@@ -7,6 +7,11 @@
  * @since        1.2.0
  **/
 
+// Путь к JSON файлу со статическими данными по тарифам
+define(
+  'JSON_ALL_TARIFF_OPTIONS_PATH',
+  YL_DIR . '/rko-calc/acf-data/all-tariff-options.json'
+);
 //  Регистрируем произвольные типы данных
 require_once YL_DIR . '/rko-calc/inc/register-cpt.php';
 
