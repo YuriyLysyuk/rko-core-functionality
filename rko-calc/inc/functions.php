@@ -11,22 +11,25 @@
  * Возвращает информацию о банке выбранного тарифа
  *
  */
-function get_bank_options($tariffID = false)
+function get_bank_options($bankObject = false)
 {
-  if (!$tariffID) {
+  if (!$bankObject) {
     return;
   }
 
   $bankOptions = [];
 
-  $bankObject = get_field('bank', $tariffID);
+  // Устанавливаем свой ключ кэша
+  $cache_key = 'bank_' . $bankObject->ID . '_options';
 
-  $bankOptionFields = get_fields($bankObject->ID);
+  // Если данных нет в кэше, то делаем запрос получаем данные и записываем их в кэш
+  $bankOptions = wp_cache_get($cache_key);
 
-  if ($bankOptionFields) {
-    foreach ($bankOptionFields as $optionName => $optionValue) {
-      $bankOptions[$optionName] = $optionValue;
-    }
+  if (false === $bankOptions) {
+    $bankOptions = get_fields($bankObject->ID);
+
+    // Добавим данные в кэш для повторного использования
+    wp_cache_set($cache_key, $bankOptions);
   }
 
   return $bankOptions;
@@ -53,7 +56,7 @@ function get_tariff_options($tariffObject = false)
   if ($tariffOptionFields) {
     foreach ($tariffOptionFields as $optionName => $optionValue) {
       if ('bank' == $optionName) {
-        $tariffOptions['bank'] = get_bank_options($tariffObject->ID);
+        $tariffOptions['bank'] = get_bank_options($optionValue);
       } else {
         $tariffOptions[$optionName] = $optionValue;
       }
