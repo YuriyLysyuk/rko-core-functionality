@@ -16,6 +16,7 @@ defined( 'ABSPATH' ) || exit;
 // Plugin directory
 define('YL_DIR', plugin_dir_path(__FILE__));
 
+require_once YL_DIR . '/inc/helpers.php';
 require_once YL_DIR . '/inc/general.php';
 require_once YL_DIR . '/inc/wordpress-cleanup.php';
 require_once YL_DIR . '/inc/kill-trackbacks.php';
