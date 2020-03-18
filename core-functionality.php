@@ -11,6 +11,8 @@
  * @copyright  Copyright (c) 2019, Yuriy Lysyuk
  */
 
+defined( 'ABSPATH' ) || exit;
+
 // Plugin directory
 define('YL_DIR', plugin_dir_path(__FILE__));
 
