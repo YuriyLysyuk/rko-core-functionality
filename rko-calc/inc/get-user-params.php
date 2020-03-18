@@ -14,23 +14,36 @@
 function get_user_params()
 {
   $userParams = [
-    'income' => 100000,
-		'personal_transfer' => 100000,
-		'people_transfer' => 0,
-		'payment_order' => 0,
-		'get_atm' => 0,
-		'get_cashbox' => 0,
-		'put_atm' => 0,
-		'put_cashbox' => 0,
-		'corp_card' => false,
-		'sms' => false
     // ooo - Если ИП: false, если ООО: true
     'ooo' => 0,
+    'income' => 200000,
+    // personal_transfer = 0, если ooo = 1
+    'personal_transfer' => 120000,
+    'people_transfer' => 0,
+    'payment_order' => 5,
+    'get_atm' => 30000,
+    'get_cashbox' => 0,
+    'put_atm' => 15000,
+    'put_cashbox' => 0,
+    'corp_card' => true,
+    'sms' => true
   ];
 
-  echo '<pre>';
-  print_r($userParams);
-  echo '</pre>';
+  /* $userParams = [
+    // ooo - Если ИП: false, если ООО: true
+    'ooo' => 1,
+    'income' => 200000,
+    // personal_transfer = 0, если ooo = 1
+    'personal_transfer' => 0,
+    'people_transfer' => 120000,
+    'payment_order' => 5,
+    'get_atm' => 30000,
+    'get_cashbox' => 0,
+    'put_atm' => 15000,
+    'put_cashbox' => 0,
+    'corp_card' => true,
+    'sms' => true
+  ]; */
 
   return $userParams;
 }
