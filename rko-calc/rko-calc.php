@@ -62,10 +62,3 @@ function rko_calc(WP_REST_Request $request)
 
   return rest_ensure_response($response);
 }
-
-add_action('rest_api_init', function () {
-  register_rest_route('rko-calc/v1', '/calculate/', array(
-    'methods' => WP_REST_Server::READABLE,
-    'callback' => 'rko_calc'
-  ));
-});
