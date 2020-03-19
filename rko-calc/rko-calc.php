@@ -7,19 +7,8 @@
  * @since        1.2.0
  **/
 
-// Путь к JSON файлу со статическими данными по тарифам
-define(
-  'JSON_ALL_TARIFF_OPTIONS_PATH',
-  YL_DIR . '/rko-calc/acf-data/all-tariff-options.json'
-);
-// Путь к маркерному файлу, который показывает необходимость обновить JSON файл с данными по тарифам
-define(
-  'JSON_ALL_TARIFF_OPTIONS_NEED_UPDATE_PATH',
-  YL_DIR . '/rko-calc/acf-data/all-tariff-options-need-update'
-);
-
-//  Регистрируем произвольные типы данных
-require_once YL_DIR . '/rko-calc/inc/register-cpt.php';
+// Объявляем константы
+require_once YL_DIR . '/rko-calc/inc/defined.php';
 
 // Change ACF Local JSON save location to /acf folder inside this plugin
 add_filter('acf/settings/save_json', function () {
