@@ -10,11 +10,14 @@
 // Объявляем константы
 require_once YL_DIR . '/rko-calc/inc/defined.php';
 
+// Регистрируем произвольные типы записей для тарифов и банков
+require_once YL_DIR . '/rko-calc/inc/register-cpt.php';
 
+// Регистрируем произвольные типы записей для тарифов и банков
 require_once YL_DIR . '/rko-calc/inc/acf.php';
 
-// Добавляем шорткод для вывода калькулятора на странице
-require_once YL_DIR . '/rko-calc/inc/shortcode.php';
+// Функции для админки
+require_once YL_DIR . '/rko-calc/inc/admin.php';
 
 // Подключаем функции для получения значений пользовательского запроса
 require_once YL_DIR . '/rko-calc/inc/get-user-params.php';
@@ -25,8 +28,8 @@ require_once YL_DIR . '/rko-calc/inc/functions.php';
 // Подключаем функции для вычисления стоимости использования тарифа
 require_once YL_DIR . '/rko-calc/inc/calculate.php';
 
-// Функции для админки
-require_once YL_DIR . '/rko-calc/inc/admin.php';
+// Добавляем шорткод для вывода калькулятора на странице
+require_once YL_DIR . '/rko-calc/inc/shortcode.php';
 
 function rko_calc($request)
 {
