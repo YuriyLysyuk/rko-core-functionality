@@ -15,7 +15,35 @@ function rko_calc_shortcode()
 {
   $form = '
     <form id="rko-calc-form">
-			<input type="text" name="income" id="income" value="0">
+      <label for="income">Поступления на счет от юр. лиц и ИП, ₽</label>
+      <input type="text" name="income" id="income" value="0">
+      <label for="ooo">ИП или ООО?</label>
+      <input type="checkbox" name="ooo" id="ooo">
+      <br>
+      <label for="personal_transfer">Перевод себе на карту, ₽</label>
+      <input type="text" name="personal_transfer" id="personal_transfer" value="0">
+      <label for="people_transfer">Переводы физическим лицам, ₽</label>
+      <input type="text" name="people_transfer" id="people_transfer" value="0">
+      <label for="payment_order">Количество платежей на счета юр. лиц и ИП, шт</label>
+      <input type="text" name="payment_order" id="payment_order" value="0">
+      <label for="get_cash">Будете снимать наличные?</label>
+      <input type="checkbox" id="get_cash">
+      <br>
+      <label for="get_atm">Снятие наличных в банкомате, ₽</label>
+      <input type="text" name="get_atm" id="get_atm" value="0">
+      <label for="get_cashbox">Снятие наличных в кассе банка, ₽</label>
+      <input type="text" name="get_cashbox" id="get_cashbox" value="0">
+      <label for="put_atm">Внесение наличных в банкомате, ₽</label>
+      <input type="text" name="put_atm" id="put_atm" value="0">
+      <label for="put_cashbox">Внесение наличных в кассе банка, ₽</label>
+      <input type="text" name="put_cashbox" id="put_cashbox" value="0">
+      <label for="corp_card">Бизнес-карта</label>
+      <input type="checkbox" name="corp_card" id="corp_card">
+      <br>
+      <label for="sms">SMS-информирование</label>
+      <input type="checkbox" name="sms" id="sms">
+      <br>
+
       <input type="submit" value="Получить личный ТОП банков" id="submit">
     </form>
     <div id="rko-calc-results">
