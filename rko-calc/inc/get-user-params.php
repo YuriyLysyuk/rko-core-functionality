@@ -7,43 +7,23 @@
  * @since        1.2.0
  **/
 
-/**
- *
- *
- */
-function get_user_params()
+function get_user_params(WP_REST_Request $request)
 {
   $userParams = [
     // ooo - Если ИП: false, если ООО: true
-    'ooo' => 0,
-    'income' => 200000,
+    'ooo' => $request['ooo'],
+    'income' => $request['income'],
     // personal_transfer = 0, если ooo = 1
-    'personal_transfer' => 120000,
-    'people_transfer' => 0,
-    'payment_order' => 5,
-    'get_atm' => 30000,
-    'get_cashbox' => 0,
-    'put_atm' => 15000,
-    'put_cashbox' => 0,
-    'corp_card' => true,
-    'sms' => true
+    'personal_transfer' => $request['personal_transfer'],
+    'people_transfer' => $request['people_transfer'],
+    'payment_order' => $request['payment_order'],
+    'get_atm' => $request['get_atm'],
+    'get_cashbox' => $request['get_cashbox'],
+    'put_atm' => $request['put_atm'],
+    'put_cashbox' => $request['put_cashbox'],
+    'corp_card' => $request['corp_card'],
+    'sms' => $request['sms']
   ];
-
-  /* $userParams = [
-    // ooo - Если ИП: false, если ООО: true
-    'ooo' => 1,
-    'income' => 200000,
-    // personal_transfer = 0, если ooo = 1
-    'personal_transfer' => 0,
-    'people_transfer' => 120000,
-    'payment_order' => 5,
-    'get_atm' => 30000,
-    'get_cashbox' => 0,
-    'put_atm' => 15000,
-    'put_cashbox' => 0,
-    'corp_card' => true,
-    'sms' => true
-  ]; */
 
   return $userParams;
 }

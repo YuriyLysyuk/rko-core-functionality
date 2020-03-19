@@ -31,16 +31,10 @@ require_once YL_DIR . '/rko-calc/inc/calculate.php';
 // Добавляем шорткод для вывода калькулятора на странице
 require_once YL_DIR . '/rko-calc/inc/shortcode.php';
 
-function rko_calc($request)
+function rko_calc(WP_REST_Request $request)
 {
-  $response = [];
-
-  // $response = $request->get_params();
-
-  // $param = $request['income'];
-
   // Получаем параметры пользовательского запроса
-  $userParams = get_user_params();
+  $userParams = get_user_params($request);
 
   // Получаем данные каждого тарифа и конструируем ассоциативный массив
   $allTariffOptions = get_all_tariff_options();
