@@ -17,6 +17,9 @@ require_once YL_DIR . '/rko-calc/inc/register-cpt.php';
 require_once YL_DIR . '/rko-calc/inc/acf.php';
 
 // Функции для админки
+require_once YL_DIR . '/rko-calc/inc/rest.php';
+
+// Функции для админки
 require_once YL_DIR . '/rko-calc/inc/admin.php';
 
 // Подключаем функции для получения значений пользовательского запроса
