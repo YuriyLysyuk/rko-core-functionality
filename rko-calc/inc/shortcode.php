@@ -63,8 +63,20 @@ add_shortcode('rko_calc', 'rko_calc_shortcode');
 function rko_calc_rest_api_scripts()
 {
   global $post;
+
   // Подключаем скрипт только если на странице есть шорткод
   if (has_shortcode($post->post_content, "rko_calc")) {
+    // Если файл с данными по тарифам не существует
+    if (!file_exists(JSON_ALL_TARIFF_OPTIONS_PATH)) {
+      // Нужно его сформировать
+      get_all_tariff_options();
+    }
+
+    // Открываем и декодируем JSON с данными по тарифам
+    $allTariffOptionsJson = json_decode(
+      @file_get_contents(JSON_ALL_TARIFF_OPTIONS_PATH)
+    );
+
     wp_enqueue_script(
       'rko-calc',
       plugins_url('assets/rko-calc.js', dirname(__FILE__)),
@@ -72,9 +84,11 @@ function rko_calc_rest_api_scripts()
       false,
       true
     );
+
     wp_localize_script('rko-calc', 'rkoCalc', array(
       'restURL' => esc_url_raw(rest_url()),
-      'restNonce' => wp_create_nonce('wp_rest')
+      'restNonce' => wp_create_nonce('wp_rest'),
+      'allTariffOptions' => $allTariffOptionsJson
     ));
   }
 }
