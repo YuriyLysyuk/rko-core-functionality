@@ -77,15 +77,21 @@ function rko_calc_rest_api_scripts()
       @file_get_contents(JSON_ALL_TARIFF_OPTIONS_PATH)
     );
 
+    // Стили калькулятора
+    // wp_enqueue_style(
+    //   'rko-calc-css',
+    //   plugins_url('assets/rko-calc.css', dirname(__FILE__))
+    // );
+
     wp_enqueue_script(
-      'rko-calc',
+      'rko-calc-js',
       plugins_url('assets/rko-calc.js', dirname(__FILE__)),
       array('jquery'),
       false,
       true
     );
 
-    wp_localize_script('rko-calc', 'rkoCalc', array(
+    wp_localize_script('rko-calc-js', 'rkoCalc', array(
       'restURL' => esc_url_raw(rest_url()),
       'restNonce' => wp_create_nonce('wp_rest'),
       'allTariffOptions' => $allTariffOptionsJson
