@@ -14,42 +14,75 @@
 function rko_calc_shortcode()
 {
   $form = '
-    <form id="rko-calc-form">
-      <label for="income">Поступления на счет от юр. лиц и ИП, ₽</label>
-      <input type="text" name="income" id="income" value="0">
-      <label for="ooo">ИП или ООО?</label>
-      <input type="checkbox" name="ooo" id="ooo">
-      <br>
-      <label for="personal_transfer">Перевод себе на карту, ₽</label>
-      <input type="text" name="personal_transfer" id="personal_transfer" value="0">
-      <label for="people_transfer">Переводы физическим лицам, ₽</label>
-      <input type="text" name="people_transfer" id="people_transfer" value="0">
-      <label for="payment_order">Количество платежей на счета юр. лиц и ИП, шт</label>
-      <input type="text" name="payment_order" id="payment_order" value="0">
-      <label for="get_cash">Будете снимать наличные?</label>
-      <input type="checkbox" id="get_cash">
-      <br>
-      <label for="get_atm">Снятие наличных в банкомате, ₽</label>
-      <input type="text" name="get_atm" id="get_atm" value="0">
-      <label for="get_cashbox">Снятие наличных в кассе банка, ₽</label>
-      <input type="text" name="get_cashbox" id="get_cashbox" value="0">
-      <label for="put_atm">Внесение наличных в банкомате, ₽</label>
-      <input type="text" name="put_atm" id="put_atm" value="0">
-      <label for="put_cashbox">Внесение наличных в кассе банка, ₽</label>
-      <input type="text" name="put_cashbox" id="put_cashbox" value="0">
-      <label for="corp_card">Бизнес-карта</label>
-      <input type="checkbox" name="corp_card" id="corp_card">
-      <br>
-      <label for="sms">SMS-информирование</label>
-      <input type="checkbox" name="sms" id="sms">
-      <br>
+  <div class="rko-calc color-bg alignwide">
+    <form id="rko-calc-form" class="rko-calc-form">
+      <label class="rko-calc-field-label">Форма регистрации</label>
+      <div class="switch-field">
+      <input type="radio" name="ooo" id="ip" checked value="0"><label for="ip"><span>ИП</span></label>
+      <input type="radio" name="ooo" id="ooo" value="1"><label for="ooo"><span>ООО</span></label>
+      </div>
 
-      <input type="submit" value="Получить личный ТОП банков" id="submit">
+      <label class="rko-calc-field-label" for="income">Поступления на счет от юр. лиц и ИП</label>
+      <div>
+        <input type="text" name="income" id="income" placeholder="" value="0" data-value="0">
+        <div id="income-slider"></div>
+      </div>
+
+      <label class="rko-calc-field-label" for="payment_order">Платежные поручения</label>
+      <div>
+        <input type="text" name="payment_order" id="payment_order" value="0" data-value="0">
+        <div id="payment_order-slider"></div>
+      </div>
+      
+      <label class="rko-calc-field-label" for="people_transfer">Переводы физ. лицам</label>
+      <div>
+        <input type="text" name="people_transfer" id="people_transfer" value="0" data-value="0">
+        <div id="people_transfer-slider"></div>
+      </div>
+
+      <label class="rko-calc-field-label" for="personal_transfer">Переводы себе на карту</label>
+      <div>
+        <input type="text" name="personal_transfer" id="personal_transfer" value="0" data-value="0"> 
+        <div id="personal_transfer-slider"></div>
+      </div>
+
+      <div>Подробнее</div>
+
+      <div class="h5">Дополнительные услуги</div>
+      <div><input type="checkbox" name="corp_card" id="corp_card" checked><label for="corp_card">Бизнес-карта</label></div>
+      <div><input type="checkbox" name="sms" id="sms"><label for="sms">SMS-информирование</label></div>
+      
+      <p class="h5">Снятие наличных</p>
+      <label class="rko-calc-field-label" for="get_atm">В банкомате</label>
+      <div>
+        <input type="text" name="get_atm" id="get_atm" value="0" data-value="0">
+        <div id="get_atm-slider"></div>
+      </div>
+
+      <label class="rko-calc-field-label" for="get_cashbox">В кассе банка</label>
+      <div>
+        <input type="text" name="get_cashbox" id="get_cashbox" placeholder="" value="0" data-value="0">
+        <div id="get_cashbox-slider"></div>
+      </div>
+
+      <div class="h5">Внесение наличных</div>
+      <label class="rko-calc-field-label" for="put_atm">В банкомате</label>
+      <div>
+        <input type="text" name="put_atm" id="put_atm" placeholder="" value="0" data-value="0">
+        <div id="put_atm-slider"></div>
+      </div>
+
+      <label class="rko-calc-field-label" for="put_cashbox">В кассе банка</label>
+      <div>
+        <input type="text" name="put_cashbox" id="put_cashbox" placeholder="" value="0" data-value="0">
+        <div id="put_cashbox-slider"></div>
+      </div>
     </form>
     <div id="rko-calc-results">
-		
+    
     </div>
-  ';
+  </div>
+';
 
   return $form;
   // rko_calc(1);
@@ -77,16 +110,36 @@ function rko_calc_rest_api_scripts()
       @file_get_contents(JSON_ALL_TARIFF_OPTIONS_PATH)
     );
 
-    // Стили калькулятора
-    // wp_enqueue_style(
-    //   'rko-calc-css',
-    //   plugins_url('assets/rko-calc.css', dirname(__FILE__))
-    // );
+    // Стили слайдера
+    wp_enqueue_style(
+      'nouislider-css',
+      plugins_url('assets/nouislider.min.css', dirname(__FILE__)),
+      array(),
+      '14.2.0'
+    );
+
+    // Скрипты слайдера
+    wp_enqueue_script(
+      'nouislider-js',
+      plugins_url('assets/nouislider.min.js', dirname(__FILE__)),
+      array(),
+      '14.2.0',
+      true
+    );
+
+    // Скрипты слайдера
+    wp_enqueue_script(
+      'wnumb',
+      plugins_url('assets/wNumb.min.js', dirname(__FILE__)),
+      array('nouislider-js'),
+      '1.2.0',
+      true
+    );
 
     wp_enqueue_script(
       'rko-calc-js',
       plugins_url('assets/rko-calc.js', dirname(__FILE__)),
-      array('jquery'),
+      array('jquery', 'nouislider-js'),
       false,
       true
     );
