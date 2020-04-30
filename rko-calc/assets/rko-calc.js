@@ -177,6 +177,12 @@
         inputSliderHandle.focus();
       });
 
+      // В начале перемещения ползунка слайдера мышкой или пальцем...
+      inputSlider.noUiSlider.on("start", function() {
+        // ...устанавливаем фокус на ползунок для управления с клавиатуры.
+        inputSliderHandle.focus();
+      });
+
       // При движении ползунка слайдера...
       inputSlider.noUiSlider.on("update", function(values, handle) {
         let value = values[handle];
@@ -194,16 +200,12 @@
         input.dataset.value = Math.round(unencoded[handle]);
         // ...и отправляем форму.
         rkoCalcForm.submit();
-
-        // Устанавливаем фокус на ползунок для управления с клавиатуры
-        inputSliderHandle.focus();
       });
 
       // При попадании фокуса на инпут со сладером...
       input.addEventListener(
         "focus",
         function(event) {
-
           // ...приводим значение поля к неотформатированному варианту...
           event.target.value = event.target.dataset.value;
 
@@ -219,7 +221,6 @@
 
       // При изменении значения инпута со слайдером...
       input.addEventListener("change", function(event) {
-
         // ...записываем в data-value предварительно очищенное от нечисловых символов значение...
         event.target.dataset.value = Number(
           event.target.value.replace(/[^\d]/g, "")
@@ -241,10 +242,8 @@
       input.addEventListener(
         "blur",
         function(event) {
-
           // ...если значение инпута было изменено...
           if (event.target.hasChanged) {
-
             // ...отключаем флаг изменений, форма отправляется с помощью отдельного события.
             event.target.hasChanged = false;
 
