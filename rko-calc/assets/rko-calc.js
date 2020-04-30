@@ -1,4 +1,3 @@
-// ToDo Стилизация, скрытие и раскрытие Подробного поиска
 // ToDo Стилизация формы под разные разрешения
 
 (function($) {
@@ -278,8 +277,31 @@
       });
     });
 
+    // Кнопка подробного расчета
+    const detailedCalculationButton = document.querySelector(
+      ".detailed-calculation > span"
+    );
+    // Контейнер кнопки подробного расчета
+    const detailedCalculation = document.querySelector(
+      ".detailed-calculation"
+    );
+    // Скрытые поля подробного расчета
+    const detailedHiddens = document.querySelectorAll(
+      ".detailed-hidden"
+    );
+
+    // При каждом клике по кнопке подробного расчета...
+    detailedCalculationButton.addEventListener("click", function() {
+      // ...переключать состояние контейнера кнопки...
+      detailedCalculation.classList.toggle("active");
+      // ...и переключать видимость скрытых полей подробного расчета.
+      detailedHiddens.forEach(function(detailedHidden) {
+        detailedHidden.classList.toggle("active");
+      });
+    });
+
     // При изменении состояния инпутов в форме, отправляем ее на сервер (для ползунков слайдера отдельное событие)
-    rkoCalcForm.change(function(){
+    rkoCalcForm.change(function() {
       rkoCalcForm.submit();
     });
 
