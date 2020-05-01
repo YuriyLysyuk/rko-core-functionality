@@ -14,7 +14,7 @@
 function rko_calc_shortcode()
 {
   $form = '
-  <div class="rko-calc color-bg alignwide">
+  <div class="rko-calc color-bg color-bg-green alignwide">
     <form id="rko-calc-form" class="rko-calc-form">
       <label class="rko-calc-field-label">Форма регистрации</label>
       <div class="switch-field">
