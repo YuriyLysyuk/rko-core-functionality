@@ -323,22 +323,42 @@
       });
     });
 
-    // Кнопка подробного расчета
+    // Кнопка дополнительных параметров
     const detailedCalculationButton = document.querySelector(
       ".detailed-calculation > span"
     );
-    // Контейнер кнопки подробного расчета
+    // Контейнер кнопки дополнительных параметров
     const detailedCalculation = document.querySelector(".detailed-calculation");
-    // Скрытые поля подробного расчета
+    // Скрытые поля дополнительных параметров
     const detailedHiddens = document.querySelectorAll(".detailed-hidden");
 
-    // При каждом клике по кнопке подробного расчета...
+    // При каждом клике по кнопке дополнительных параметров...
     detailedCalculationButton.addEventListener("click", function () {
       // ...переключать состояние контейнера кнопки...
       detailedCalculation.classList.toggle("active");
-      // ...и переключать видимость скрытых полей подробного расчета.
+      // ...и переключать видимость скрытых полей дополнительных параметров.
       detailedHiddens.forEach(function (detailedHidden) {
         detailedHidden.classList.toggle("active");
+      });
+    });
+
+    // Кнопки детальных сведений с расшифровкой суммы
+    const resultDetailsButtons = document.querySelectorAll(
+      ".result-calculated-details"
+    );
+    // Скрытая область детальных сведений
+    const resultDetailsWraps = document.querySelectorAll(
+      ".result-details-wrap"
+    );
+
+    // Для каждой кнопки детальных сведений...
+    resultDetailsButtons.forEach(function (resultDetailsButton, index) {
+      // ...при клике на кнопку...
+      resultDetailsButton.addEventListener("click", function () {
+        // ...переключать состояние контейнера кнопки...
+        resultDetailsButton.classList.toggle("active");
+        // ...и переключать видимость скрытой области детальных сведений
+        resultDetailsWraps[index].classList.toggle("active");
       });
     });
 
@@ -353,12 +373,12 @@
       let rkoCalcFormData = serialize(rkoCalcForm[0]);
       // console.clear();
       // console.log(rkoCalcFormData);
-      console.log(
-        "REST URL: " +
-          rkoCalc.restURL +
-          "rko-calc/v1/calculate?" +
-          rkoCalcFormData
-      );
+      // console.log(
+      //   "REST URL: " +
+      //     rkoCalc.restURL +
+      //     "rko-calc/v1/calculate?" +
+      //     rkoCalcFormData
+      // );
       // console.log(rkoCalc.allTariffOptions);
 
       $.ajax({
@@ -367,7 +387,7 @@
         data: rkoCalcFormData,
 
         success: function (post) {
-          // console.log(post);
+          console.log(post);
         },
       });
     });
