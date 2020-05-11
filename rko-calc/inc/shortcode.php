@@ -48,11 +48,11 @@ function rko_calc_shortcode()
   ';
   $form .= '
       <div class="detailed-calculation">
-        <span>Подробный расчет <svg class="open" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m11.9932649 19.500812c-.6352342.000819-1.2400333-.2833911-1.65984-.78l-9.41856003-11.15199999c-.61913211-.76859096-.53599584-1.91147321.1872475-2.57410938.72324334-.66263618 1.82204752-.60264878 2.4748325.13510938l8.23584003 9.75199999c.0455704.0541548.1113462.0852092.18048.0852092.0691337 0 .1349096-.0310544.18048-.0852092l8.23584-9.75199999c.4135143-.51333692 1.0615094-.75310007 1.6932379-.626511s1.1480791.59966995 1.3492454 1.2361798c.2011663.63650986.0555875 1.33658731-.3804033 1.8293312l-9.41568 11.14799999c-.4205256.497811-1.0261445.7833703-1.66272.784z" fill-rule="evenodd"/></svg><svg class="close" enable-background="new 0 0 24 24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m12 4.5c.6 0 1.2.3 1.7.8l9.4 11.2c.6.8.5 1.9-.2 2.6s-1.8.6-2.5-.1l-8.2-9.8c0-.2-.1-.2-.2-.2s-.1 0-.2.1l-8.2 9.8c-.4.5-1.1.8-1.7.6-.6-.1-1.1-.6-1.3-1.2s-.1-1.3.4-1.8l9.4-11.1c.4-.6 1-.9 1.6-.9z"/></svg></span>
+        <span>Дополнительные параметры</span><span> <svg class="open" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m11.9932649 19.500812c-.6352342.000819-1.2400333-.2833911-1.65984-.78l-9.41856003-11.15199999c-.61913211-.76859096-.53599584-1.91147321.1872475-2.57410938.72324334-.66263618 1.82204752-.60264878 2.4748325.13510938l8.23584003 9.75199999c.0455704.0541548.1113462.0852092.18048.0852092.0691337 0 .1349096-.0310544.18048-.0852092l8.23584-9.75199999c.4135143-.51333692 1.0615094-.75310007 1.6932379-.626511s1.1480791.59966995 1.3492454 1.2361798c.2011663.63650986.0555875 1.33658731-.3804033 1.8293312l-9.41568 11.14799999c-.4205256.497811-1.0261445.7833703-1.66272.784z" fill-rule="evenodd"/></svg><svg class="close" enable-background="new 0 0 24 24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m12 4.5c.6 0 1.2.3 1.7.8l9.4 11.2c.6.8.5 1.9-.2 2.6s-1.8.6-2.5-.1l-8.2-9.8c0-.2-.1-.2-.2-.2s-.1 0-.2.1l-8.2 9.8c-.4.5-1.1.8-1.7.6-.6-.1-1.1-.6-1.3-1.2s-.1-1.3.4-1.8l9.4-11.1c.4-.6 1-.9 1.6-.9z"/></svg></span>
       </div>
   ';
   $form .= '
-      <div class="rko-calc-field-label detailed-hidden">Дополнительные услуги</div>
+      <div class="rko-calc-field-label detailed-hidden">Услуги и продукты</div>
       <div class="detailed-hidden">
         <div><input type="checkbox" name="corp_card" id="corp_card" checked><label for="corp_card">Бизнес-карта</label></div>
         <div><input type="checkbox" name="sms" id="sms" checked><label for="sms">SMS-информирование</label></div>
@@ -84,10 +84,61 @@ function rko_calc_shortcode()
         <div id="put_cashbox-slider"></div>
       </div>
     </form>
-    <div id="rko-calc-results">
-    
-    </div>
+
+    <h2>Ваш личный топ банков</h2>
+
+    <ul id="rko-calc-results" class="rko-calc-results">
+
+      <li class="result-wrap">
+        <div class="result-position">1</div>
+        <div class="result-bank">
+          <img src="https://f.sravni.ru/logotypes/banks/biglogo_326.svg" class="result-bank-logo">
+          <div class="result-bаnk-license">лиц. № 1234</div>
+        </div>
+        <div class="result-tariff">
+          <div class="result-tariff-label">Тариф</div>
+          <div class="result-tariff-name">Офигительный</div>
+        </div>
+        <div class="result-calculated">
+          <div class="result-calculated-sum">6 425 <span class="">₽/мес</span></div>
+          <div class="result-calculated-details">
+            <span>Детально</span><span> <svg class="open" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m11.9932649 19.500812c-.6352342.000819-1.2400333-.2833911-1.65984-.78l-9.41856003-11.15199999c-.61913211-.76859096-.53599584-1.91147321.1872475-2.57410938.72324334-.66263618 1.82204752-.60264878 2.4748325.13510938l8.23584003 9.75199999c.0455704.0541548.1113462.0852092.18048.0852092.0691337 0 .1349096-.0310544.18048-.0852092l8.23584-9.75199999c.4135143-.51333692 1.0615094-.75310007 1.6932379-.626511s1.1480791.59966995 1.3492454 1.2361798c.2011663.63650986.0555875 1.33658731-.3804033 1.8293312l-9.41568 11.14799999c-.4205256.497811-1.0261445.7833703-1.66272.784z" fill-rule="evenodd"/></svg><svg class="close" enable-background="new 0 0 24 24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m12 4.5c.6 0 1.2.3 1.7.8l9.4 11.2c.6.8.5 1.9-.2 2.6s-1.8.6-2.5-.1l-8.2-9.8c0-.2-.1-.2-.2-.2s-.1 0-.2.1l-8.2 9.8c-.4.5-1.1.8-1.7.6-.6-.1-1.1-.6-1.3-1.2s-.1-1.3.4-1.8l9.4-11.1c.4-.6 1-.9 1.6-.9z"/></svg></span>
+          </div>
+        </div>
+        <div class="result-button-wrap">
+          <a href="#" class="result-button button button-small button-outline">Перейти на сайт</a>
+        </div>
+        <div class="result-details-wrap">
+
+        </div>
+      </li>
+      <li class="result-wrap">
+        <div class="result-position">2</div>
+        <div class="result-bank">
+          <img src="https://f.sravni.ru/logotypes/banks/biglogo_438.svg" class="result-bank-logo">
+          <div class="result-bаnk-license">лиц. № 1234</div>
+        </div>
+        <div class="result-tariff">
+          <div class="result-tariff-label">Тариф</div>
+          <div class="result-tariff-name">Открытые возможности</div>
+        </div>
+        <div class="result-calculated">
+          <div class="result-calculated-sum">1 247 333 <span class="">₽/мес</span></div>
+          <div class="result-calculated-details">
+            <span>Детально</span><span> <svg class="open" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m11.9932649 19.500812c-.6352342.000819-1.2400333-.2833911-1.65984-.78l-9.41856003-11.15199999c-.61913211-.76859096-.53599584-1.91147321.1872475-2.57410938.72324334-.66263618 1.82204752-.60264878 2.4748325.13510938l8.23584003 9.75199999c.0455704.0541548.1113462.0852092.18048.0852092.0691337 0 .1349096-.0310544.18048-.0852092l8.23584-9.75199999c.4135143-.51333692 1.0615094-.75310007 1.6932379-.626511s1.1480791.59966995 1.3492454 1.2361798c.2011663.63650986.0555875 1.33658731-.3804033 1.8293312l-9.41568 11.14799999c-.4205256.497811-1.0261445.7833703-1.66272.784z" fill-rule="evenodd"/></svg><svg class="close" enable-background="new 0 0 24 24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m12 4.5c.6 0 1.2.3 1.7.8l9.4 11.2c.6.8.5 1.9-.2 2.6s-1.8.6-2.5-.1l-8.2-9.8c0-.2-.1-.2-.2-.2s-.1 0-.2.1l-8.2 9.8c-.4.5-1.1.8-1.7.6-.6-.1-1.1-.6-1.3-1.2s-.1-1.3.4-1.8l9.4-11.1c.4-.6 1-.9 1.6-.9z"/></svg></span>
+          </div>
+        </div>
+        <div class="result-button-wrap">
+          <a href="#" class="result-button button button-small button-outline">Перейти на сайт</a>
+        </div>
+        <div class="result-details-wrap">
+
+        </div>
+      </li>
+    </ul>
+
   </div>
+
 ';
 
   return $form;
@@ -120,7 +171,7 @@ function rko_calc_rest_api_scripts()
     wp_enqueue_style(
       'nouislider-css',
       plugins_url('assets/nouislider.min.css', dirname(__FILE__)),
-      array(),
+      [],
       '14.2.0'
     );
 
@@ -128,7 +179,7 @@ function rko_calc_rest_api_scripts()
     wp_enqueue_script(
       'nouislider-js',
       plugins_url('assets/nouislider.min.js', dirname(__FILE__)),
-      array(),
+      [],
       '14.2.0',
       true
     );
@@ -137,7 +188,7 @@ function rko_calc_rest_api_scripts()
     wp_enqueue_script(
       'wnumb',
       plugins_url('assets/wNumb.min.js', dirname(__FILE__)),
-      array('nouislider-js'),
+      ['nouislider-js'],
       '1.2.0',
       true
     );
@@ -145,16 +196,16 @@ function rko_calc_rest_api_scripts()
     wp_enqueue_script(
       'rko-calc-js',
       plugins_url('assets/rko-calc.js', dirname(__FILE__)),
-      array('jquery', 'nouislider-js'),
+      ['jquery', 'nouislider-js'],
       false,
       true
     );
 
-    wp_localize_script('rko-calc-js', 'rkoCalc', array(
+    wp_localize_script('rko-calc-js', 'rkoCalc', [
       'restURL' => esc_url_raw(rest_url()),
       'restNonce' => wp_create_nonce('wp_rest'),
-      'allTariffOptions' => $allTariffOptionsJson
-    ));
+      'allTariffOptions' => $allTariffOptionsJson,
+    ]);
   }
 }
 add_action('wp_enqueue_scripts', 'rko_calc_rest_api_scripts');
