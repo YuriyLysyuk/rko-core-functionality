@@ -109,8 +109,64 @@ function rko_calc_shortcode()
           <a href="#" class="result-button button button-small button-outline">Перейти на сайт</a>
         </div>
         <div class="result-details-wrap">
-
-        </div>
+          <div class="result-details-item">
+            Открытие счета — <span class="price">бесплатно</span>
+          </div>
+          <hr class="result-details-sep">
+          <div class="result-details-item">
+            Обслуживание счета — <span class="price">490 <span>₽/мес</span></span>
+          </div>
+          <div class="result-details-notes-title">Условия тарифа:</div>
+          <div class="result-details-notes-body">
+            <ul>
+              <li>1 мес. — 490 ₽</li>
+              <li>12 мес. — 4900 ₽</li>
+            </ul>
+          </div>
+          <div class="result-details-notes-title">Как сэкономить:</div>
+          <div class="result-details-notes-body">
+            <ul>
+              <li>При оплате за год скидка 980 ₽</li>
+            </ul>
+          </div>
+          <div class="result-details-notes-title">Обратите внимание:</div>
+          <div class="result-details-notes-body">
+            <ul>
+              <li>К тарифу временно нельзя подключиться с 20 февраля по 20 мая 2020 года</li>
+            </ul>
+          </div>
+          <hr class="result-details-sep">
+          <div class="result-details-item">
+            Поступление <span class="user-value">3 323 123 ₽</span> на счет от юр. лиц и ИП — <span class="price">бесплатно</span>
+          </div>
+          <hr class="result-details-sep">
+          <div class="result-details-item">
+            Платежные поручения <span class="user-value">(71 шт)</span> — <span class="price">4 850 <span>₽/мес</span></span>
+          </div>
+          <div class="result-details-notes-title">Условия тарифа:</div>
+          <div class="result-details-notes-body">
+            <ul>
+              <li>до 3 шт — бесплатно</li>
+              <li>от 4 шт — 50 ₽/шт</li>
+            </ul>
+          </div>
+          <hr class="result-details-sep">
+          <div class="result-details-item">
+            Перевод <span class="user-value">1 240 765 ₽</span> на личную карту в Альфа-Банке — <span class="price">33 300 <span>₽/мес</span></span>
+          </div>
+          <div class="result-details-notes-title">Условия тарифа:</div>
+          <div class="result-details-notes-body">
+            <ul>
+              <li>до 150 000 ₽ — бесплатно</li>
+              <li>от 150 000,01 ₽ до 300 000 ₽ — 1%, мин. 100 ₽</li>
+              <li>от 300 000,01 ₽ до 1 000 000 ₽ — 1,5%, мин. 100 ₽</li>
+              <li>от 1 000 000,01 ₽ до 2 000 000 ₽ — 3%, мин. 100 ₽</li>
+              <li>от 2 000 000,01 ₽ — 10%, мин. 100 ₽</li>
+            </ul>
+          </div>
+          <div class="result-details-button-wrap">
+            <a href="#" class="result-details-button button button-small">Открыть счет с тарифом «Лучший старт»</a>
+          </div>
       </li>
       <li class="result-wrap">
         <div class="result-position">2</div>
