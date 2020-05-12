@@ -325,7 +325,7 @@
 
     // Кнопка дополнительных параметров
     const detailedCalculationButton = document.querySelector(
-      ".detailed-calculation > span"
+      ".detailed-calculation"
     );
     // Контейнер кнопки дополнительных параметров
     const detailedCalculation = document.querySelector(".detailed-calculation");
