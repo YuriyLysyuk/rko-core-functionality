@@ -105,6 +105,7 @@
 
   /**
    * Подготавливает URL строку с параметрами формы для ajax
+   * с учетом слайдеров с параметрами
    *
    *  Подсмотрел здесь https://gomakethings.com/how-to-serialize-form-data-with-vanilla-js/
    */
@@ -151,12 +152,6 @@
 
     return serialized.join("&");
   };
-
-  /* function results(val) {
-    $("#results").empty();
-    $("#results").append('<div class="post-title">' + val.title + "</div>");
-    $("#results").append('<div class="post-content">' + val.content + "</div>");
-  } */
 
   $(document).ready(function () {
     // Объект формы калькулятора
