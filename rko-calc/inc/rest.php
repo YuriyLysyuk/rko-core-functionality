@@ -79,13 +79,13 @@ add_action('rest_api_init', function () {
         }
       ),
       'corp_card' => array(
-        'default' => true,
+        'default' => false,
         'sanitize_callback' => function ($param, $request, $key) {
           return (bool) $param;
         }
       ),
       'sms' => array(
-        'default' => true,
+        'default' => false,
         'sanitize_callback' => function ($param, $request, $key) {
           return (bool) $param;
         }
