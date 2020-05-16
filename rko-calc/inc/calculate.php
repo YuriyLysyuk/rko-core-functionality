@@ -37,8 +37,35 @@ function get_tariff_options_context_cond($userParams, $tariffOptions, $context)
       // Получаем условия по тарифу для ООО
       $tariffOptionsContextCond = $tariffOptions[$context]['cond_ooo'];
     } else {
-      // Получаем условия по тарифу для ИП, которые такие же как и для ООО
-      $tariffOptionsContextCond = $tariffOptions[$context]['cond'];
+      if (
+        // Если расчет для получения наличных в кассе банка, а кассы в банке нет
+        $context === 'get_cashbox' &&
+        isset($tariffOptions['have_cashbox']) &&
+        !$tariffOptions['have_cashbox']
+      ) {
+        // Проверяем, заданы ли для получения наличных через банкомат отдельные условия для ООО...
+        if (
+          isset($tariffOptions['get_atm']['same_for_ooo']) &&
+          !$tariffOptions['get_atm']['same_for_ooo']
+        ) {
+          // ...используем условия получения наличных через банкомат для ООО
+          $tariffOptionsContextCond = $tariffOptions['get_atm']['cond_ooo'];
+        } else {
+          // ...используем условия получения наличных через банкомат для ИП
+          $tariffOptionsContextCond = $tariffOptions['get_atm']['cond'];
+        }
+      } elseif (
+        // Если расчет для внесения наличных в кассе банка, а кассы в банке нет...
+        $context === 'put_cashbox' &&
+        isset($tariffOptions['have_cashbox']) &&
+        !$tariffOptions['have_cashbox']
+      ) {
+        // ...используем условия внесения наличных через банкомат
+        $tariffOptionsContextCond = $tariffOptions['put_atm']['cond'];
+      } else {
+        // Получаем условия по тарифу для ИП, которые такие же как и для ООО
+        $tariffOptionsContextCond = $tariffOptions[$context]['cond'];
+      }
     }
   } else {
     // Если расчет для ИП, мы обсчитываем стоимость перевода на личный счет и условия переводов на личный счет такие же как для переводов на счета других физ. лиц
@@ -50,13 +77,21 @@ function get_tariff_options_context_cond($userParams, $tariffOptions, $context)
       // Получаем условия переводов на счета других физ. лиц
       $tariffOptionsContextCond = $tariffOptions['people_transfer']['cond'];
     } elseif (
-      // Если расчет для получения или внесения наличных в кассе банка, а кассы в банке нет — обнуляем условия
-      ($context === 'get_cashbox' || $context === 'put_cashbox') &&
+      // Если расчет для получения наличных в кассе банка, а кассы в банке нет...
+      $context === 'get_cashbox' &&
       isset($tariffOptions['have_cashbox']) &&
       !$tariffOptions['have_cashbox']
     ) {
-      // Иначе получаем отдельно заданные условия
-      $tariffOptionsContextCond = false;
+      // ...используем условия получения наличных через банкомат
+      $tariffOptionsContextCond = $tariffOptions['get_atm']['cond'];
+    } elseif (
+      // Если расчет для внесения наличных в кассе банка, а кассы в банке нет...
+      $context === 'put_cashbox' &&
+      isset($tariffOptions['have_cashbox']) &&
+      !$tariffOptions['have_cashbox']
+    ) {
+      // ...используем условия внесения наличных через банкомат
+      $tariffOptionsContextCond = $tariffOptions['put_atm']['cond'];
     } else {
       // Иначе получаем отдельно заданные условия
       $tariffOptionsContextCond = $tariffOptions[$context]['cond'];
