@@ -352,6 +352,36 @@
 
 
 
+    // Функция для вывода результатов работы калькулятора
+    // Для каждого тарифа вызывает шаблон формирования html с результатом
+    function rkoCalcResultsTemplate(rkoCalcResults) {
+      document.getElementById("rko-calc-results").innerHTML = `
+        <h2>Личный Топ ${rkoCalcResults.length} тарифов РКО</h2>
+        <ul class="rko-calc-results-list">
+          ${rkoCalcResults.map(tariffTemplate).join("")}
+        </ul>
+      `;
+
+      // Собираем все кнопки детальных сведений с расшифровкой суммы
+      const resultDetailsButtons = document.querySelectorAll(
+        ".result-calculated-details"
+      );
+      // Собираем все скрытае области детальных сведений
+      const resultDetailsWraps = document.querySelectorAll(
+        ".result-details-wrap"
+      );
+
+      // Для каждой кнопки детальных сведений...
+      resultDetailsButtons.forEach(function (resultDetailsButton, index) {
+        // ...при клике на кнопку...
+        resultDetailsButton.addEventListener("click", function () {
+          // ...переключать состояние контейнера кнопки...
+          resultDetailsButton.classList.toggle("active");
+          // ...и переключать видимость скрытой области детальных сведений
+          resultDetailsWraps[index].classList.toggle("active");
+        });
+      });
+    }
 
     // Функция для получения результатор работы калькулятора через ajax-запрос
     function rkoCalcFormAjax() {
