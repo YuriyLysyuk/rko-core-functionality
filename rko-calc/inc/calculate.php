@@ -252,15 +252,8 @@ function calculate($userParams = false, $tariffOptions = false)
   $calculated['service'] = calculate_service_cost($tariffOptions);
 
   // Считаем комиссию по опциям с диапазонами условий
-  $rangeFeeContext = [
-    'income',
-    'personal_transfer',
-    'people_transfer',
-    'get_atm',
-    'get_cashbox',
-    'put_atm',
-    'put_cashbox'
-  ];
+  // Первая часть. Вынес отдельно, что бы разместить после income payment_order
+  $rangeFeeContext = ['income'];
 
   foreach ($rangeFeeContext as $context) {
     $calculated[$context] = calculate_range_fee(
@@ -275,6 +268,25 @@ function calculate($userParams = false, $tariffOptions = false)
     $userParams,
     $tariffOptions
   );
+
+  // Считаем комиссию по опциям с диапазонами условий
+  // Вторая часть. Вынес отдельно, что бы разместить после income payment_order
+  $rangeFeeContext = [
+    'people_transfer',
+    'personal_transfer',
+    'get_atm',
+    'get_cashbox',
+    'put_atm',
+    'put_cashbox',
+  ];
+
+  foreach ($rangeFeeContext as $context) {
+    $calculated[$context] = calculate_range_fee(
+      $userParams,
+      $tariffOptions,
+      $context
+    );
+  }
 
   // Считаем комиссию по опциям, которые либо включены либо нет
   $booleanFeeContext = ['corp_card', 'sms'];
