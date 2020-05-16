@@ -350,54 +350,46 @@
       });
     });
 
-    // Кнопки детальных сведений с расшифровкой суммы
-    const resultDetailsButtons = document.querySelectorAll(
-      ".result-calculated-details"
-    );
-    // Скрытая область детальных сведений
-    const resultDetailsWraps = document.querySelectorAll(
-      ".result-details-wrap"
-    );
 
-    // Для каждой кнопки детальных сведений...
-    resultDetailsButtons.forEach(function (resultDetailsButton, index) {
-      // ...при клике на кнопку...
-      resultDetailsButton.addEventListener("click", function () {
-        // ...переключать состояние контейнера кнопки...
-        resultDetailsButton.classList.toggle("active");
-        // ...и переключать видимость скрытой области детальных сведений
-        resultDetailsWraps[index].classList.toggle("active");
+
+
+    // Функция для получения результатор работы калькулятора через ajax-запрос
+    function rkoCalcFormAjax() {
+      // Подготавливаем сериализованную строку с помощью собственной функции
+      let rkoCalcFormData = serialize(rkoCalcForm[0]);
+      // ToDO: добавить отображение загрузки результатов, подумать какой вид loading использовать
+      console.log(rkoCalc.allTariffOptions);
+
+      $.ajax({
+        type: "GET",
+        // Подготавливаем url для запроса к REST API
+        url: rkoCalc.restURL + "rko-calc/v1/calculate?" + rkoCalcFormData,
+        // Передаем в запрос сериализованные поля формы
+        data: rkoCalcFormData,
+
+        // При успешном запросе...
+        success: function (rkoCalcResults) {
+          console.log(rkoCalcResults);
+          // ...вывести результаты на экран
+          rkoCalcResultsTemplate(rkoCalcResults);
+        },
       });
-    });
+    }
+
+    // Запускаем ajax-запрос для получения результатов работы калькулятора при загрузке страницы
+    rkoCalcFormAjax();
 
     // При изменении состояния инпутов в форме, отправляем ее на сервер (для ползунков слайдера отдельное событие)
     rkoCalcForm.change(function () {
       rkoCalcForm.submit();
     });
 
+    // При отправке формы...
     rkoCalcForm.on("submit", function (e) {
+      // ...отключаем события браузера по умолчанию...
       e.preventDefault();
-      // serialize() не обрабатывает поля без name, значит служебные переключатели можно исключить из URL
-      let rkoCalcFormData = serialize(rkoCalcForm[0]);
-      // console.clear();
-      // console.log(rkoCalcFormData);
-      // console.log(
-      //   "REST URL: " +
-      //     rkoCalc.restURL +
-      //     "rko-calc/v1/calculate?" +
-      //     rkoCalcFormData
-      // );
-      // console.log(rkoCalc.allTariffOptions);
-
-      $.ajax({
-        type: "GET",
-        url: rkoCalc.restURL + "rko-calc/v1/calculate?" + rkoCalcFormData,
-        data: rkoCalcFormData,
-
-        success: function (post) {
-          console.log(post);
-        },
-      });
+      // ...и отправляем ajax-запрос для получения результатов работы калькулятор
+      rkoCalcFormAjax();
     });
   });
 })(jQuery);
