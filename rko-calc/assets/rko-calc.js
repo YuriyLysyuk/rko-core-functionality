@@ -12,7 +12,20 @@
   const grandFormat = wNumb({
     decimals: 0,
     thousand: " ",
-    suffix: " шт.",
+    suffix: " шт",
+  });
+
+  // Формат чисел для денежных значений без денежного знака
+  const moneyFormatWOS = wNumb({
+    decimals: 0,
+    thousand: " ",
+  });
+
+  // Формат чисел для денежных значений с дробной частью без денежного знака
+  const moneyFormatWOSFloat = wNumb({
+    decimals: 2,
+    mark: ",",
+    thousand: " ",
   });
 
   // Диапазон значений и шаг для входящих денег на счет
