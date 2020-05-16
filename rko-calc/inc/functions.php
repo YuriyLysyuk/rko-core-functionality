@@ -98,7 +98,9 @@ function get_all_tariff_options()
 
     foreach ($allTariffObjects as $tariffObject) {
       // Получаем данные каждого тарифа и конструируем ассоциативный массив
-      $allTariffOptions[] = get_tariff_options($tariffObject);
+      $tariffOptions = get_tariff_options($tariffObject);
+      // Ключами массива будут id тарифа
+      $allTariffOptions[$tariffOptions['id']] = $tariffOptions;
     }
 
     // Кодируем строку в JSON
