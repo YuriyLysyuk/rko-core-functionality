@@ -50,6 +50,9 @@ function rko_calc(WP_REST_Request $request)
     // Вычисляем стоимость облуживания по каждому пункту тарифа
     $tariff['calculated'] = calculate($userParams, $tariffOptions);
 
+    // Добавляем пользовательские данные в массив
+    $tariff['user_params'] = $userParams;
+
     // Вычисляем общую стоимость обслуживания по тарифу
     $tariff['calculated_sum'] = 0;
     foreach ($tariff['calculated'] as $valueToSum) {
