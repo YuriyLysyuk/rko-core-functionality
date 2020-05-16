@@ -350,6 +350,278 @@
       });
     });
 
+    // Формируем верстку с детальной расшифровкой результата по тарифу
+    function tariffDetails(tariffCalculated, tariffOptions, userParams) {
+      // Объект с именованием полей (в данной части неизменяемых динамически)
+      let paramsName = {
+        corp_card: "Корпоративная карта",
+        opening_cost: "Открытие счета",
+        service: "Обслуживание счета",
+        sms: "SMS-информирование",
+      };
+
+      // html-вывод
+      let html = "";
+
+      // Индикатор первого выводимого параметра в цикле
+      let isFirstParamOutput = true;
+
+      // Для каждого параметра в результатах вычислений
+      for (let param in tariffCalculated) {
+        // Если обрабатываются переводы на личную карту и расчет для ООО, перейти к следующему параметру
+        if (param == "personal_transfer" && userParams.ooo) continue;
+
+        // Если параметр (из списка) не задан пользователем, перейти к следующему параметру
+        if (
+          (param == "income" ||
+            param == "people_transfer" ||
+            param == "personal_transfer" ||
+            param == "get_atm" ||
+            param == "get_cashbox" ||
+            param == "put_atm" ||
+            param == "put_cashbox" ||
+            param == "payment_order" ||
+            param == "corp_card" ||
+            param == "sms") &&
+          !userParams[param]
+        )
+          continue;
+
+        // Если это первый выводимый параметр...
+        isFirstParamOutput
+          ? // ...переключаем индикатор в false
+            (isFirstParamOutput = false)
+          : // ...это не первый вывод — выводим раделитель
+            (html += "<hr class='result-details-sep'>");
+
+        // Добавляем в объект с именованием полей динамические поля
+        paramsName.personal_transfer = `Перевод <span class="user-value">${moneyFormatWOS.to(
+          userParams[param]
+        )} ₽</span> на личную карту в ${tariffOptions.bank.name.gde}`;
+        paramsName.income = `Поступление <span class="user-value">${moneyFormatWOS.to(
+          userParams[param]
+        )} ₽</span> на счет от юр. лиц и ИП`;
+        paramsName.people_transfer = `Перевод <span class="user-value">${moneyFormatWOS.to(
+          userParams[param]
+        )} ₽</span> физ. лицам`;
+        paramsName.get_atm = `Снятие <span class="user-value">${moneyFormatWOS.to(
+          userParams[param]
+        )} ₽</span> в банкомате`;
+        paramsName.get_cashbox = `Снятие <span class="user-value">${moneyFormatWOS.to(
+          userParams[param]
+        )} ₽</span> в кассе банка`;
+        paramsName.put_atm = `Внесение <span class="user-value">${moneyFormatWOS.to(
+          userParams[param]
+        )} ₽</span> в банкомате`;
+        paramsName.put_cashbox = `Внесение <span class="user-value">${moneyFormatWOS.to(
+          userParams[param]
+        )} ₽</span> в кассе банка`;
+        paramsName.payment_order = `Платежные поручения <span class="user-value">(${moneyFormatWOS.to(
+          userParams[param]
+        )} шт)</span>`;
+
+        // Формируем верстку заголовка параметра с вычисленной стоимостью
+        html += `
+          <div class="result-details-param">
+            ${paramsName[param]} — <span class="price">
+            ${
+              // Если результат вычисления 0...
+              !tariffCalculated[param]
+                ? // ...выводим слово «бесплатно»
+                  "бесплатно"
+                : // ...результат не нулевой. Если обрабатывается параметр стоимости открытия...
+                param == "opening_cost"
+                ? // ...выводим стоимость с ₽ в конце
+                  moneyFormatWOS.to(tariffCalculated[param]) +
+                  " <span> ₽</span>"
+                : // ...иначе выводим стоимость с ₽/мес в конце
+                  moneyFormatWOS.to(tariffCalculated[param]) +
+                  " <span> ₽/мес</span>"
+            }
+            </span>
+            </div>
+            `;
+
+        // Формируем верску условий тарифа в зависимости от обрабатываемого параметра
+        // tariffCondTemplate() используется для вывода диапазона условий
+        switch (param) {
+          case "people_transfer":
+          case "get_atm":
+            html += `
+              <div class="result-details-notes-title">Условия тарифа:</div>
+              <div class="result-details-notes-body">
+                <ul>
+                ${
+                  // Если расчет был для ИП...
+                  !userParams.ooo
+                    ? // ...вывести условия для ИП
+                      tariffOptions[param].cond.map(tariffCondTemplate).join("")
+                    : // Расчет для ООО. Если тарифы для ООО такие же как для ИП...
+                    tariffOptions[param].same_for_ooo
+                    ? // ...выводим условия для ИП
+                      tariffOptions[param].cond.map(tariffCondTemplate).join("")
+                    : // ...для ООО заданы отдельные тарифы — выводим их
+                      tariffOptions[param].cond_ooo
+                        .map(tariffCondTemplate)
+                        .join("")
+                }
+                </ul>
+              </div>
+            `;
+            break;
+
+          case "personal_transfer":
+            html += `
+              <div class="result-details-notes-title">Условия тарифа:</div>
+              <div class="result-details-notes-body">
+                <ul>
+                ${
+                  // Если условия переводов на свою карту такие же как условия переводов физ. лицам...
+                  tariffOptions.personal_transfer_same_as_people_transfer
+                    ? // ...выводим условия переводов физ. лицам
+                      tariffOptions["people_transfer"].cond
+                        .map(tariffCondTemplate)
+                        .join("")
+                    : // ...условия переводов на свою карту заданы отдельно. Выводим их
+                      tariffOptions[param].cond.map(tariffCondTemplate).join("")
+                }
+                </ul>
+              </div>
+            `;
+            break;
+
+          case "get_cashbox":
+          case "put_cashbox":
+            html += `
+              <div class="result-details-notes-title">Условия тарифа:</div>
+              <div class="result-details-notes-body">
+                <ul>
+                ${
+                  // Если в банке есть касса...
+                  tariffOptions.have_cashbox
+                    ? // ...выводим условия параметра в кассе банка
+                      tariffOptions[param].cond.map(tariffCondTemplate).join("")
+                    : // ...кассы в банке нет. Выводим соответствующее сообщение
+                      "<li>В банке нет физических отделений с кассой, расчет выполнен по условиям операции через банкомат</li>"
+                }
+                </ul>
+              </div>
+            `;
+            break;
+
+          case "income":
+            // Если поступления на счет не бесплатные — выводим условия тарифа
+            if (tariffCalculated[param]) {
+              html += `
+                <div class="result-details-notes-title">Условия тарифа:</div>
+                <div class="result-details-notes-body">
+                  <ul>
+                  ${tariffOptions[param].cond.map(tariffCondTemplate).join("")}
+                  </ul>
+                </div>
+              `;
+            }
+            break;
+
+          case "put_atm":
+            html += `
+                  <div class="result-details-notes-title">Условия тарифа:</div>
+                  <div class="result-details-notes-body">
+                    <ul>
+                    ${tariffOptions[param].cond
+                      .map(tariffCondTemplate)
+                      .join("")}
+                    </ul>
+                  </div>
+                `;
+            break;
+
+          case "service":
+            // Если обсуживание счета не бесплатное — выводим условия тарифа
+            if (tariffCalculated[param]) {
+              html += `
+                <div class="result-details-notes-title">Условия тарифа:</div>
+                <div class="result-details-notes-body">
+                  <ul>
+                  ${tariffOptions[param].cond
+                    .map(
+                      (cond) =>
+                        `<li>${cond.period} мес — ${moneyFormatWOS.to(
+                          cond.cost
+                        )} ₽</li>`
+                    )
+                    .join("")}
+                  </ul>
+                </div>
+              `;
+            }
+
+            break;
+
+          case "payment_order":
+            html += `
+                <div class="result-details-notes-title">Условия тарифа:</div>
+                <div class="result-details-notes-body">
+                  <ul>
+                    ${
+                      // Если в тариф включены бесплатные платежки...
+                      tariffOptions[param].free
+                        ? // ...выводим их и стоимость платных
+                          "<li>до " +
+                          tariffOptions[param].free +
+                          " шт — бесплатно</li><li>остальные — " +
+                          tariffOptions[param].paid +
+                          " ₽/шт</li>"
+                        : // ...беслпатных платежек нет. Если задана стоимость платных...
+                        tariffOptions[param].paid
+                        ? // ...выводим стоимость платежки
+                          "<li>" + tariffOptions[param].paid + " ₽/шт</li>"
+                        : // ...иначе все платежки бесплатные
+                          "<li>любое количество — бесплатно</li>"
+                    }
+                  </ul>
+                </div>
+              `;
+
+            break;
+
+          case "corp_card":
+            // Если для корпоративной карты заполнены поля кэшбэка и бесплатного периода — выводим их
+            if (
+              tariffOptions[param].cachback ||
+              tariffOptions[param].free_period
+            ) {
+              html += `
+              <div class="result-details-notes-title">Бонусы:</div>
+              <div class="result-details-notes-body">
+                <ul>
+                  ${
+                    tariffOptions[param].free_period
+                      ? "<li>бесплатный период — " +
+                        tariffOptions[param].free_period +
+                        "</li>"
+                      : ""
+                  }
+                  ${
+                    tariffOptions[param].cachback
+                      ? "<li>кэшбэк — " +
+                        tariffOptions[param].cachback +
+                        "</li>"
+                      : ""
+                  }
+                </ul>
+              </div>
+            `;
+            }
+
+            break;
+        }
+
+        // ToDO добавить вывод дополнительных сообщений: Мелким шрифтом, Обратите внимание, Как сэкономить
+      }
+
+      return html;
+    }
 
     // Шаблон формирования html с результатом по отдельному тарифу
     function tariffTemplate(rkoCalcResult, index) {
