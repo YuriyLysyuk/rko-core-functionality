@@ -398,6 +398,18 @@
       `;
     }
 
+    // Формируем верстку для вывода определенного типа дополнительной информации
+    function tariffInfo(info, infoTitle) {
+      return `
+        <div class="result-details-notes-title">${infoTitle}:</div>
+        <div class="result-details-notes-body">
+          <ul>
+            ${info.map((infoItem) => `<li>${infoItem}</li>`).join("")}
+          </ul>
+        </div>
+      `;
+    }
+
     // Формируем верстку с детальной расшифровкой результата по тарифу
     function tariffDetails(tariffCalculated, tariffOptions, userParams) {
       // Объект с именованием полей (в данной части неизменяемых динамически)
@@ -665,7 +677,39 @@
             break;
         }
 
-        // ToDO добавить вывод дополнительных сообщений: Мелким шрифтом, Обратите внимание, Как сэкономить
+        // Если заполнена дополнительная информация — выводим её (в параметре Открытие счета его нет, поэтому исключаем)
+        if (param != "opening_cost" && tariffOptions[param].info) {
+          // Массив для идей как сэкономить
+          let infoIdea = [];
+          // Массив для предупреждений
+          let infoWarning = [];
+          // Массив для написанного мелким шрифтом
+          let infoSmall = [];
+
+          // Для каждой записи...
+          for (let key in tariffOptions[param].info) {
+            // ...определяем ее тип...
+            let infoType = tariffOptions[param].info[key].type;
+            // ...и текст
+            let infoText = tariffOptions[param].info[key].text;
+            // Собираем тексты в соответсвующий массив
+            "idea" == infoType ? infoIdea.push(infoText) : "";
+            "warning" == infoType ? infoWarning.push(infoText) : "";
+            "small" == infoType ? infoSmall.push(infoText) : "";
+          }
+
+          // Если массивы заполнены — выводим их
+          infoIdea.length
+            ? (html += tariffInfo(infoIdea, "Как сэкономить"))
+            : "";
+          infoWarning.length
+            ? (html += tariffInfo(infoWarning, "Обратите внимание"))
+            : "";
+          infoSmall.length
+            ? (html += tariffInfo(infoSmall, "Мелким шрифтом"))
+            : "";
+        }
+
       }
 
       return html;
