@@ -710,8 +710,6 @@
             ? (html += tariffInfo(infoSmall, "Мелким шрифтом"))
             : "";
         }
-
-        // ToDO добавить вывод кнопки в детальных сведениях
       }
 
       return html;
@@ -758,6 +756,11 @@
               tariffOptions,
               userParams
             )}
+            <div class="result-details-button-wrap">
+              <a href="${
+                tariffOptions.button.url
+              }" target="_blank" onclick="${tariffOptions.button.onclick.calc_ext}" class="result-details-button button button-small">Открыть счет с тарифом «${tariffOptions.name}»</a>
+            </div>
           </div>
         </li>
       `;
