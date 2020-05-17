@@ -678,8 +678,40 @@
             break;
         }
 
-        // Если заполнена дополнительная информация — выводим её (в параметре Открытие счета его нет, поэтому исключаем)
-        if (param != "opening_cost" && tariffOptions[param].info) {
+        // Если заполнена дополнительная информация — выводим её в случаях:
+        // это не параметр Открытие счета и
+        // это не параметры Внесения и Снятия в кассе, когда кассы в банке нет
+        if (
+          param != "opening_cost" &&
+          !(
+            (param == "put_cashbox" || param == "get_cashbox") &&
+            !tariffOptions.have_cashbox
+          )
+        ) {
+          // Параметр для подмены
+          let tempParam = param;
+          // Параметр какой блок использовать: ИП или ООО, по умолчанию ИП
+          let tempBlock = "info";
+          switch (param) {
+            case "personal_transfer":
+              // Если условия тарифа для перевода на свою карту такие же как условия перевода физ.лицам...
+              tariffOptions.personal_transfer_same_as_people_transfer
+                ? // ...используем инфу из условий перевода физ. лицам
+                  (tempParam = "people_transfer")
+                : "";
+              break;
+
+            case "people_transfer":
+            case "get_atm":
+              // Если расчет был для ООО и для него заданы собственные условия...
+              userParams.ooo && !tariffOptions[param].same_for_ooo
+                ? // ...используем инфу для ООО
+                  (tempBlock = "info_ooo")
+                : "";
+
+              break;
+          }
+
           // Массив для идей как сэкономить
           let infoIdea = [];
           // Массив для предупреждений
@@ -688,11 +720,12 @@
           let infoSmall = [];
 
           // Для каждой записи...
-          for (let key in tariffOptions[param].info) {
+          for (let key in tariffOptions[tempParam][tempBlock]) {
             // ...определяем ее тип...
-            let infoType = tariffOptions[param].info[key].type;
+            let infoType = tariffOptions[tempParam][tempBlock][key].type;
             // ...и текст
-            let infoText = tariffOptions[param].info[key].text;
+            let infoText = tariffOptions[tempParam][tempBlock][key].text;
+
             // Собираем тексты в соответсвующий массив
             "idea" == infoType ? infoIdea.push(infoText) : "";
             "warning" == infoType ? infoWarning.push(infoText) : "";
