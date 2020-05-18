@@ -11,10 +11,12 @@
  * @copyright  Copyright (c) 2019, Yuriy Lysyuk
  */
 
-defined( 'ABSPATH' ) || exit;
+defined('ABSPATH') || exit();
 
 // Plugin directory
 define('YL_DIR', plugin_dir_path(__FILE__));
+// Plugin URL
+define('YL_URL', plugin_dir_url(__FILE__));
 
 require_once YL_DIR . '/inc/helpers.php';
 require_once YL_DIR . '/inc/general.php';

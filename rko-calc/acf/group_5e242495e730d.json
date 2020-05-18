@@ -61,8 +61,8 @@
             "key": "field_5e24274baa9cc",
             "label": "Логотип",
             "name": "logo",
-            "type": "image",
-            "instructions": "",
+            "type": "text",
+            "instructions": "Имя логотипа в папке плагина: rko-calc\/assets\/img\/",
             "required": 1,
             "conditional_logic": 0,
             "wrapper": {
@@ -70,16 +70,47 @@
                 "class": "",
                 "id": ""
             },
-            "return_format": "id",
-            "preview_size": "full",
-            "library": "all",
-            "min_width": "",
-            "min_height": "",
-            "min_size": "",
-            "max_width": "",
-            "max_height": "",
-            "max_size": "",
-            "mime_types": ""
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "maxlength": ""
+        },
+        {
+            "key": "field_5ec228337540e",
+            "label": "Лицензия",
+            "name": "license",
+            "type": "group",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "block",
+            "sub_fields": [
+                {
+                    "key": "field_5ec228777540f",
+                    "label": "Номер",
+                    "name": "number",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 1,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "maxlength": ""
+                }
+            ]
         }
     ],
     "location": [
@@ -99,5 +130,5 @@
     "hide_on_screen": "",
     "active": 1,
     "description": "",
-    "modified": "1584528593"
+    "modified": "1589801286"
 }

@@ -755,16 +755,18 @@
       // Получаем параметры текущего тарифа
       let tariffOptions = rkoCalc.allTariffOptions[rkoCalcResult.id];
 
-      // ToDO подготовить и внедрить логотипы банков, добавить в базу номер лицензии банка и вывести ее
-
       // Возвращаем html с версткой по отдельному тарифу
       // tariffDetails() возвращает верстку с детальной расшифровкой результата
       return `
         <li class="result-wrap">
           <div class="result-position">${index + 1}</div>
           <div class="result-bank">
-            <img src="/biglogo_326.svg" class="result-bank-logo">
-            <div class="result-bаnk-license">лиц. № 1234</div>
+            <img src="${
+              tariffOptions.bank.logo
+            }" class="result-bank-logo" alt="Логотип ${tariffOptions.bank.name.chto}">
+            <div class="result-bаnk-license">лиц. № ${
+              tariffOptions.bank.license.number
+            }</div>
           </div>
           <div class="result-tariff">
             <div class="result-tariff-label">Тариф</div>

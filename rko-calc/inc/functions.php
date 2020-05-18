@@ -26,7 +26,19 @@ function get_bank_options($bankObject = false)
   $bankOptions = wp_cache_get($cache_key);
 
   if (false === $bankOptions) {
-    $bankOptions = get_fields($bankObject->ID);
+    $bankOptionsFields = get_fields($bankObject->ID);
+
+    // Предварительно обрабатываем вывод если нужно
+    if ($bankOptionsFields) {
+      foreach ($bankOptionsFields as $optionName => $optionValue) {
+        if ('logo' == $optionName) {
+          $bankOptions['logo'] =
+            YL_URL . "/rko-calc/assets/img/" . $optionValue;
+        } else {
+          $bankOptions[$optionName] = $optionValue;
+        }
+      }
+    }
 
     // Добавим данные в кэш для повторного использования
     wp_cache_set($cache_key, $bankOptions);
@@ -93,7 +105,7 @@ function get_all_tariff_options()
     // Получаем все доступные тарифы
     $allTariffObjects = get_posts([
       'numberposts' => -1,
-      'post_type' => 'tariffs'
+      'post_type' => 'tariffs',
     ]);
 
     foreach ($allTariffObjects as $tariffObject) {
@@ -174,13 +186,13 @@ function sort_tariffs(
   // Оригинальный многомерный массив сортируется по выбранному параметру внутри массива
 
   // Создаем специальный сортировочный массив, который будет опеределять порядок сортировки
-  $sortArray = array();
+  $sortArray = [];
 
   // Заполняем сортировочный массив значениями
   foreach ($tariffs as $tariff) {
     foreach ($tariff as $key => $value) {
       if (!isset($sortArray[$key])) {
-        $sortArray[$key] = array();
+        $sortArray[$key] = [];
       }
       $sortArray[$key][] = $value;
     }
