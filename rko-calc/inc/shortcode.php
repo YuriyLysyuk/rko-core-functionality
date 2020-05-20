@@ -21,6 +21,8 @@ function rko_calc_shortcode()
       <input type="radio" name="ooo" id="ip" checked value="0"><label for="ip"><span>ИП</span></label>
       <input type="radio" name="ooo" id="ooo" value="1"><label for="ooo"><span>ООО</span></label>
       </div>
+      
+      <div class="h5 every-month">Ежемесячно</div>
 
       <label class="rko-calc-field-label" for="income">Поступления на счет от юр. лиц и ИП</label>
       <div class="rko-calc-field-slider">
