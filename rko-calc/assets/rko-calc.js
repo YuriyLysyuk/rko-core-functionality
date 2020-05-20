@@ -1,4 +1,3 @@
-// ToDo разобраться, почему при перемещении ползунка, если курсор мыши находится над текстовым полем — на него ставиться фокус
 (function ($) {
   "use strict";
 
@@ -808,6 +807,7 @@
         <h2>Личный Топ ${rkoCalcResults.length} тарифов РКО</h2>
         <ul class="rko-calc-results-list">
           ${rkoCalcResults.map(tariffTemplate).join("")}
+          <div class="preloader"><div class="spin"></div></div>
         </ul>
       `;
 
@@ -836,7 +836,7 @@
     function rkoCalcFormAjax() {
       // Подготавливаем сериализованную строку с помощью собственной функции
       let rkoCalcFormData = serialize(rkoCalcForm[0]);
-      // ToDO: добавить отображение загрузки результатов, подумать какой вид loading использовать
+
       console.log(rkoCalc.allTariffOptions);
 
       $.ajax({
@@ -845,6 +845,13 @@
         url: rkoCalc.restURL + "rko-calc/v1/calculate?" + rkoCalcFormData,
         // Передаем в запрос сериализованные поля формы
         data: rkoCalcFormData,
+        beforeSend: function () {
+          $(".preloader").show();
+        },
+
+        complete: function () {
+          $(".preloader").hide();
+        },
 
         // При успешном запросе...
         success: function (rkoCalcResults) {
