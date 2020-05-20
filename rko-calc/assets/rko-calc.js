@@ -177,6 +177,12 @@
       // Текущая полоска для тапа
       let inputSliderConnects = inputSlider.querySelector(".noUi-connects");
 
+      // Устанавливаем текущее отформатированное значение инпута
+      input.value = params.numberFormat.to(Number(input.dataset.value));
+
+      // Переносим ползунок слайдера на место, соответстующее текущему значению, без вызова события change для слайдера
+      inputSlider.noUiSlider.setHandle(0, input.dataset.value, null);
+
       // При клике по полоске слайдера...
       inputSliderConnects.addEventListener("click", function () {
         // ...устанавливаем фокус на ползунок для управления с клавиатуры
@@ -303,31 +309,35 @@
 
     // Для каждой радиокнопки переключателя ИП и ООО...
     inputsSwitchIPOOO.forEach(function (inputSwich) {
-      // ...при изменении значения радиокнопки...
-      inputSwich.addEventListener("change", function () {
-        // ...выбираем одно из значений:
-        switch (inputSwich.value) {
+      function switchIPOOO(inputSwich) {
+        if (inputSwich.checked && inputSwich.value === "0") {
           // Если выбран ИП...
-          case "0":
-            // ...добавляем зеленый фон для обертки калькулятора...
-            rkoCalcWrap.classList.add("color-bg-green");
-            // ...и добавляем поле для ввода суммы переводов на свою карту...
-            labelPersonalTransfer.classList.remove("dn");
-            break;
+          // ...добавляем зеленый фон для обертки калькулятора...
+          rkoCalcWrap.classList.add("color-bg-green");
+          // ...и добавляем поле для ввода суммы переводов на свою карту...
+          labelPersonalTransfer.classList.remove("dn");
+        } else if (inputSwich.checked && inputSwich.value === "1") {
           // Если выбрвн ООО...
-          case "1":
-            // ...убираем зеленый фон для обертки калькулятора...
-            rkoCalcWrap.classList.remove("color-bg-green");
-            // ...убираем поле для ввода суммы переводов на свою карту...
-            labelPersonalTransfer.classList.add("dn");
-            // ...обнуляем неотформатированное значение поля переводов на свою карту...
-            inputPersonalTransfer.dataset.value = 0;
-            // ...обнуляем отформатированное значение поля переводов на свою карту...
-            inputPersonalTransfer.value = moneyFormat.to(0);
-            // ...обнуляем слайдер поля переводов на свою карту.
-            personalTransferInputSlider.noUiSlider.setHandle(0, 0, null);
-            break;
+          // ...убираем зеленый фон для обертки калькулятора...
+          rkoCalcWrap.classList.remove("color-bg-green");
+          // ...убираем поле для ввода суммы переводов на свою карту...
+          labelPersonalTransfer.classList.add("dn");
+          // ...обнуляем неотформатированное значение поля переводов на свою карту...
+          inputPersonalTransfer.dataset.value = 0;
+          // ...обнуляем отформатированное значение поля переводов на свою карту...
+          inputPersonalTransfer.value = moneyFormat.to(0);
+          // ...обнуляем слайдер поля переводов на свою карту.
+          personalTransferInputSlider.noUiSlider.setHandle(0, 0, null);
         }
+      }
+
+      // Устанавливаем начальное значение
+      switchIPOOO(inputSwich);
+
+      // При изменении значения радиокнопки...
+      inputSwich.addEventListener("change", function () {
+        // ...устанавливаем измененное значение
+        switchIPOOO(inputSwich);
       });
     });
 
@@ -833,9 +843,21 @@
     }
 
     // Функция для получения результатор работы калькулятора через ajax-запрос
-    function rkoCalcFormAjax() {
+    function rkoCalcFormAjax(isAjaxOnLoad) {
       // Подготавливаем сериализованную строку с помощью собственной функции
       let rkoCalcFormData = serialize(rkoCalcForm[0]);
+
+      // Если браузер поддерживает history.replaceState и этот вызов ajax не при загрузке страницы
+      if (history.replaceState && !isAjaxOnLoad) {
+        let baseUrl =
+          window.location.protocol +
+          "//" +
+          window.location.host +
+          window.location.pathname;
+        let newUrl = baseUrl + "?" + rkoCalcFormData;
+        // Обновляем url с выбранными параметрами калькулятора
+        history.replaceState(null, null, newUrl);
+      }
 
       console.log(rkoCalc.allTariffOptions);
 
@@ -863,7 +885,7 @@
     }
 
     // Запускаем ajax-запрос для получения результатов работы калькулятора при загрузке страницы
-    rkoCalcFormAjax();
+    rkoCalcFormAjax(true);
 
     // При изменении состояния инпутов в форме, отправляем ее на сервер (для ползунков слайдера отдельное событие)
     rkoCalcForm.change(function () {
@@ -875,7 +897,7 @@
       // ...отключаем события браузера по умолчанию...
       e.preventDefault();
       // ...и отправляем ajax-запрос для получения результатов работы калькулятор
-      rkoCalcFormAjax();
+      rkoCalcFormAjax(false);
     });
   });
 })(jQuery);
