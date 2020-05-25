@@ -113,6 +113,9 @@ function rko_calc_shortcode()
       </div>
     </form>
     <div id='rko-calc-results'>
+    <ul class='rko-calc-results-list'>
+          <div class='preloader'><div class='spin'></div></div>
+        </ul>
     </div>
   </div>
 ";
