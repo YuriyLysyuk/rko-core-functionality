@@ -103,6 +103,9 @@
     },
   ];
 
+  // Количество выводимых результатов за раз
+  const countResult = 5;
+
   /**
    * Подготавливает URL строку с параметрами формы для ajax
    * с учетом слайдеров с параметрами
@@ -757,18 +760,23 @@
       return html;
     }
 
+    // Порядковый номер результата
+    let rkoCalcResultIndex = 0;
+
     // Шаблон формирования html с результатом по отдельному тарифу
     function tariffTemplate(rkoCalcResult, index) {
       // Получаем пользовательские данные, используемые в расчетах
       let userParams = rkoCalcResult.user_params;
       // Получаем параметры текущего тарифа
       let tariffOptions = rkoCalc.allTariffOptions[rkoCalcResult.id];
+      // Увеличиваем номер результата
+      rkoCalcResultIndex++;
 
       // Возвращаем html с версткой по отдельному тарифу
       // tariffDetails() возвращает верстку с детальной расшифровкой результата
       return `
         <li class="result-wrap">
-          <div class="result-position">${index + 1}</div>
+          <div class="result-position">${rkoCalcResultIndex}</div>
           <div class="result-bank">
             <img src="${
               tariffOptions.bank.logo
@@ -810,36 +818,107 @@
       `;
     }
 
-    // Функция для вывода результатов работы калькулятора
-    // Для каждого тарифа вызывает шаблон формирования html с результатом
-    function rkoCalcResultsTemplate(rkoCalcResults) {
-      document.getElementById("rko-calc-results").innerHTML = `
-        <h2>Личный Топ ${rkoCalcResults.length} тарифов РКО</h2>
-        <ul class="rko-calc-results-list">
-          ${rkoCalcResults.map(tariffTemplate).join("")}
-          <div class="preloader"><div class="spin"></div></div>
-        </ul>
-      `;
-
+    // Показываем детальные сведения при нажатии на кнопку
+    function loadDetailsWrap() {
       // Собираем все кнопки детальных сведений с расшифровкой суммы
-      const resultDetailsButtons = document.querySelectorAll(
+      let resultDetailsButtons = document.querySelectorAll(
         ".result-calculated-details"
       );
       // Собираем все скрытае области детальных сведений
-      const resultDetailsWraps = document.querySelectorAll(
+      let resultDetailsWraps = document.querySelectorAll(
         ".result-details-wrap"
       );
 
       // Для каждой кнопки детальных сведений...
       resultDetailsButtons.forEach(function (resultDetailsButton, index) {
-        // ...при клике на кнопку...
-        resultDetailsButton.addEventListener("click", function () {
-          // ...переключать состояние контейнера кнопки...
-          resultDetailsButton.classList.toggle("active");
-          // ...и переключать видимость скрытой области детальных сведений
-          resultDetailsWraps[index].classList.toggle("active");
-        });
+        // ...проверяем, устанавливали ли мы раннее это событые на кнопку..
+        if (resultDetailsButton.getAttribute("listener") !== "true") {
+          // ...не устанавливали. Устанавливаем атрибут и событие...
+          resultDetailsButton.setAttribute("listener", "true");
+          // ...при клике на кнопку...
+          resultDetailsButton.addEventListener("click", function () {
+            // ...переключать состояние контейнера кнопки...
+            resultDetailsButton.classList.toggle("active");
+            // ...и переключать видимость скрытой области детальных сведений
+            resultDetailsWraps[index].classList.toggle("active");
+          });
+        }
       });
+    }
+
+    // Функция для вывода результатов работы калькулятора
+    // Для каждого тарифа вызывает шаблон формирования html с результатом
+    function rkoCalcResultsTemplate(rkoCalcResults) {
+      // Количество результатов
+      const resultsLength = rkoCalcResults.length;
+      // С какого результата показывать
+      let fromResult = 0;
+      // По какой результат показывать
+      let untilResult =
+        resultsLength - countResult > 0 ? countResult : resultsLength;
+      // Осталось показать результатов
+      let remainsResult =
+        resultsLength - countResult > 0 ? resultsLength - countResult : 0;
+
+      // Показываем нужное количество результатов
+      document.querySelector("#rko-calc-results").innerHTML = `
+        <h2>Личный Топ ${resultsLength} тарифов РКО</h2>
+        <ul class="rko-calc-results-list">
+          <div class="preloader"><div class="spin"></div></div>
+          ${rkoCalcResults
+            .slice(fromResult, untilResult)
+            .map(tariffTemplate)
+            .join("")}
+        </ul>
+      `;
+
+      // Если остались непоказанные результаты...
+      if (remainsResult) {
+        // ...добавляем кнопку Показать еще.
+        $("#rko-calc-results").append(`
+        <button class="load-more-results">Показать еще ${
+          remainsResult > countResult ? countResult : remainsResult
+        }</button>
+      `);
+      }
+
+      // Добавляем возможность показать детальные сведения для загруженных элементов
+      loadDetailsWrap();
+
+      // Кнопка Показать еще (результаты)
+      let loadMoreResultsButton = document.querySelector(".load-more-results");
+      // Если кнопка существует...
+      if (loadMoreResultsButton !== null) {
+        // ...добавляем событие по клику
+        loadMoreResultsButton.addEventListener("click", function () {
+          // Определяем с какого показывать результата...
+          fromResult += countResult;
+          // ...и по какой
+          untilResult += countResult;
+          // ...вычисляем отстаток непоказанных результатов
+          remainsResult =
+            remainsResult - countResult > 0 ? remainsResult - countResult : 0;
+          // Добавляем следующую очередь результатов
+          $(".rko-calc-results-list").append(
+            rkoCalcResults
+              .slice(fromResult, untilResult)
+              .map(tariffTemplate)
+              .join("")
+          );
+
+          // Если еще осталось что показывать, то обновляем количество на кнопке, иначе убираем кнопку
+          remainsResult
+            ? (loadMoreResultsButton.innerHTML = `
+        Показать еще ${
+          remainsResult > countResult ? countResult : remainsResult
+        }
+        `)
+            : (loadMoreResultsButton.style.display = "none");
+
+          // Добавляем возможность показать детальные сведения для вновь загруженных элементов
+          loadDetailsWrap();
+        });
+      }
     }
 
     // Функция для получения результатор работы калькулятора через ajax-запрос
