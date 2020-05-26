@@ -957,6 +957,8 @@
         // При успешном запросе...
         success: function (rkoCalcResults) {
           console.log(rkoCalcResults);
+          // ...обнуляем начальный номер результатов...
+          rkoCalcResultIndex = 0;
           // ...вывести результаты на экран
           rkoCalcResultsTemplate(rkoCalcResults);
         },
