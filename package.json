@@ -1,0 +1,22 @@
+{
+  "name": "rko-core-functionality",
+  "version": "1.0.0",
+  "description": "=== Core Functionality ===",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://lysyuk-y@bitbucket.org/lysyuk-y/rko-core-functionality.git"
+  },
+  "author": "Yuriy Lysyuk",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/lysyuk-y/rko-core-functionality#readme",
+  "devDependencies": {
+    "gulp": "^4.0.2",
+    "gulp-rename": "^2.0.0",
+    "gulp-sourcemaps": "^2.6.5",
+    "gulp-terser": "^1.2.0"
+  }
+}

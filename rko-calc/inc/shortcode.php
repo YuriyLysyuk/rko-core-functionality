@@ -149,7 +149,7 @@ function rko_calc_rest_api_scripts()
     // Стили слайдера
     wp_enqueue_style(
       'nouislider-css',
-      plugins_url('assets/nouislider.min.css', dirname(__FILE__)),
+      plugins_url('assets/css/nouislider.min.css', dirname(__FILE__)),
       [],
       '14.2.0'
     );
@@ -157,7 +157,7 @@ function rko_calc_rest_api_scripts()
     // Скрипты слайдера
     wp_enqueue_script(
       'nouislider-js',
-      plugins_url('assets/nouislider.min.js', dirname(__FILE__)),
+      plugins_url('assets/js/nouislider.min.js', dirname(__FILE__)),
       [],
       '14.2.0',
       true
@@ -166,7 +166,7 @@ function rko_calc_rest_api_scripts()
     // Скрипты слайдера
     wp_enqueue_script(
       'wnumb',
-      plugins_url('assets/wNumb.min.js', dirname(__FILE__)),
+      plugins_url('assets/js/wNumb.min.js', dirname(__FILE__)),
       ['nouislider-js'],
       '1.2.0',
       true
@@ -174,7 +174,7 @@ function rko_calc_rest_api_scripts()
 
     wp_enqueue_script(
       'rko-calc-js',
-      plugins_url('assets/rko-calc.js', dirname(__FILE__)),
+      plugins_url('assets/js/rko-calc.min.js', dirname(__FILE__)),
       ['jquery', 'nouislider-js'],
       false,
       true
