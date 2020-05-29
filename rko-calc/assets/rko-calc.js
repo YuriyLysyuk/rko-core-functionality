@@ -926,16 +926,41 @@
       // Подготавливаем сериализованную строку с помощью собственной функции
       let rkoCalcFormData = serialize(rkoCalcForm[0]);
 
-      // Если браузер поддерживает history.replaceState и этот вызов ajax не при загрузке страницы
-      if (history.replaceState && !isAjaxOnLoad) {
+      // Если этот вызов ajax не при загрузке страницы
+      if (!isAjaxOnLoad) {
+        // Получаем текущий URL без параметров
         let baseUrl =
           window.location.protocol +
           "//" +
           window.location.host +
           window.location.pathname;
+        // Добавляем к нему параметры калькулятора
         let newUrl = baseUrl + "?" + rkoCalcFormData;
-        // Обновляем url с выбранными параметрами калькулятора
-        history.replaceState(null, null, newUrl);
+
+        // Если браузер поддерживает history.replaceState
+        if (history.replaceState) {
+          // Обновляем url с выбранными параметрами калькулятора
+          history.replaceState(null, null, newUrl);
+        }
+
+        // Также нужно обновить ссылку для шаринга в Add To Any
+
+        // Проверяем, добавляли ли мы уже параметры Add To Any
+        for (let i = 0; i < a2a_config.callbacks.length; i++) {
+          // Если "share" есть в параметрах а2а
+          if ("share" in a2a_config.callbacks[i]) {
+            // Удаляем ее из массива что бы не дублировать
+            a2a_config.callbacks.splice(i, 1);
+          }
+        }
+        // Обновляем URL шаринга на новый
+        a2a_config.callbacks.push({
+          share: function () {
+            return {
+              url: newUrl,
+            };
+          },
+        });
       }
 
       console.log(rkoCalc.allTariffOptions);
