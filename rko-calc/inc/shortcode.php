@@ -133,8 +133,12 @@ function rko_calc_rest_api_scripts()
 {
   global $post;
 
-  // Подключаем скрипт только если на странице есть шорткод
-  if (has_shortcode($post->post_content, "rko_calc") && !is_search()) {
+  // Подключаем скрипт только если не пустой post_content, на странице есть шорткод и это не страница поиска
+  if (
+    !empty($post->post_content) &&
+    has_shortcode($post->post_content, "rko_calc") &&
+    !is_search()
+  ) {
     // Если файл с данными по тарифам не существует
     if (!file_exists(JSON_ALL_TARIFF_OPTIONS_PATH)) {
       // Нужно его сформировать
