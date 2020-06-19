@@ -860,9 +860,12 @@
       let remainsResult =
         resultsLength - countResult > 0 ? resultsLength - countResult : 0;
 
+      // Для какой формы регистрации сейчас расчет: ИП или ООО
+      let isOOO = rkoCalcResults[0].user_params.ooo;
+
       // Показываем нужное количество результатов
       document.querySelector("#rko-calc-results").innerHTML = `
-        <h2>Личный Топ ${resultsLength} тарифов РКО</h2>
+        <h2>Личный рейтинг банков для ${isOOO ? "ООО" : "ИП" }</h2>
         <ul class="rko-calc-results-list">
           <div class="preloader"><div class="spin"></div></div>
           ${rkoCalcResults
@@ -958,6 +961,7 @@
           share: function () {
             return {
               url: newUrl,
+              title: "Мой рейтинг банков для открытия расчетного счета:"
             };
           },
         });
