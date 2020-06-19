@@ -4,7 +4,7 @@
  *
  * @package      RKOCoreFunctionality
  * @author       Yuriy Lysyuk
- * @since        1.2.0
+ * @since        1.3.0
  **/
 
 /**
@@ -32,8 +32,7 @@ function get_bank_options($bankObject = false)
     if ($bankOptionsFields) {
       foreach ($bankOptionsFields as $optionName => $optionValue) {
         if ('logo' == $optionName) {
-          $bankOptions['logo'] =
-            YL_URL . "/rko-calc/assets/img/" . $optionValue;
+          $bankOptions['logo'] = YL_URL . "rko-calc/assets/img/" . $optionValue;
         } else {
           $bankOptions[$optionName] = $optionValue;
         }
