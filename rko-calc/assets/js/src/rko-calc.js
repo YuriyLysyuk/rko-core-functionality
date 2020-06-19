@@ -938,7 +938,7 @@
           window.location.host +
           window.location.pathname;
         // Добавляем к нему параметры калькулятора
-        let newUrl = baseUrl + "?" + rkoCalcFormData;
+        let newUrl = baseUrl + "?" + rkoCalcFormData + "#rko-calc-results";
 
         // Если браузер поддерживает history.replaceState
         if (history.replaceState) {
