@@ -4,7 +4,7 @@
  *
  * @package      RKOCoreFunctionality
  * @author       Yuriy Lysyuk
- * @since        1.2.0
+ * @since        1.3.0
  **/
 
 function get_user_params(WP_REST_Request $request)

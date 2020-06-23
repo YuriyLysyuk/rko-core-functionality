@@ -60,20 +60,93 @@
             "ui_off_text": "Нет"
         },
         {
-            "key": "field_5e44ebe2afa77",
-            "label": "Ссылка на тариф на сайте банка",
-            "name": "original_pdf_link",
-            "type": "url",
+            "key": "field_5ef092e65ca99",
+            "label": "Ссылки на тарифы на сайте банка",
+            "name": "docs",
+            "type": "repeater",
             "instructions": "",
-            "required": 1,
+            "required": 0,
             "conditional_logic": 0,
             "wrapper": {
                 "width": "",
                 "class": "",
                 "id": ""
             },
-            "default_value": "",
-            "placeholder": ""
+            "collapsed": "",
+            "min": 0,
+            "max": 0,
+            "layout": "table",
+            "button_label": "",
+            "sub_fields": [
+                {
+                    "key": "field_5ef0941d382bc",
+                    "label": "Тип",
+                    "name": "type",
+                    "type": "select",
+                    "instructions": "",
+                    "required": 1,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "30",
+                        "class": "",
+                        "id": ""
+                    },
+                    "choices": {
+                        "all": "Один файл на все тарифы",
+                        "short": "Краткая версия",
+                        "full": "Полная версия",
+                        "full2": "Еще одна полная версия",
+                        "html": "HTML-страница"
+                    },
+                    "default_value": false,
+                    "allow_null": 0,
+                    "multiple": 0,
+                    "ui": 0,
+                    "return_format": "array",
+                    "ajax": 0,
+                    "placeholder": ""
+                },
+                {
+                    "key": "field_5ef0a884382bd",
+                    "label": "Ссылка на файл тарифа",
+                    "name": "url",
+                    "type": "url",
+                    "instructions": "",
+                    "required": 1,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "50",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "placeholder": ""
+                },
+                {
+                    "key": "field_5ef0c7f0eb7f9",
+                    "label": "Расширение файла",
+                    "name": "ext",
+                    "type": "select",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "20",
+                        "class": "",
+                        "id": ""
+                    },
+                    "choices": {
+                        "pdf": "pdf"
+                    },
+                    "default_value": false,
+                    "allow_null": 1,
+                    "multiple": 0,
+                    "ui": 0,
+                    "return_format": "value",
+                    "ajax": 0,
+                    "placeholder": ""
+                }
+            ]
         },
         {
             "key": "field_5e1ad5dd30145",
@@ -2826,5 +2899,5 @@
     "hide_on_screen": "",
     "active": 1,
     "description": "",
-    "modified": "1584515277"
+    "modified": "1592915151"
 }

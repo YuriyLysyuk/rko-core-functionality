@@ -28,6 +28,9 @@ function get_bank_options($bankObject = false)
   if (false === $bankOptions) {
     $bankOptionsFields = get_fields($bankObject->ID);
 
+    // Slug банка
+    $bankOptions['slug'] = $bankObject->post_name;
+
     // Предварительно обрабатываем вывод если нужно
     if ($bankOptionsFields) {
       foreach ($bankOptionsFields as $optionName => $optionValue) {
@@ -63,6 +66,9 @@ function get_tariff_options($tariffObject = false)
 
   // Имя тарифа
   $tariffOptions['name'] = $tariffObject->post_title;
+
+  // Slug тарифа
+  $tariffOptions['slug'] = $tariffObject->post_name;
 
   // Получаем все остальные параметры
   $tariffOptionFields = get_fields($tariffObject->ID);

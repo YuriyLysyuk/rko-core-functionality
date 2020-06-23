@@ -1,2 +1,4 @@
 node_modules
 *.js.map
+/rko-calc/uploads/*_current*
+/rko-calc/uploads/*_previous*

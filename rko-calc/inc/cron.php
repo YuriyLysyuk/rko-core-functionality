@@ -1,0 +1,233 @@
+<?php
+/**
+ * Автоматическая проверка изменения тарифов РКО на сайтах банков
+ *
+ * @package      RKOCoreFunctionality
+ * @author       Yuriy Lysyuk
+ * @since        1.3.0
+ **/
+
+// ToDo: В crontab нужно добавить строку
+// ToDo: */15 * * * * wget -O /dev/null -q 'https://rko.guru/wp-cron.php'
+// ToDo: для срабатывания проверки заданий каждые 15 минут, если чаще никто не заходит
+
+// Проверка существования расписания во время работы плагина на всякий пожарный случай
+if (!wp_next_scheduled('rko_check_update_tariffs_doc')) {
+  // Добавляем задание для проверки изменений тарифов РКО дважды в день
+  wp_schedule_event(time(), 'twicedaily', 'rko_check_update_tariffs_doc');
+}
+
+// Добавляем функцию запуска проверки
+add_action('rko_check_update_tariffs_doc', "rko_do_check_update_tariffs_doc");
+
+// Функция для загрузки и проверки изменений файлов с тарифами с сайтов банков
+function rko_do_check_update_tariffs_doc()
+{
+  // Полный отчет по изменениям
+  $message = "";
+  // Флаг изменений
+  $haveChanges = false;
+
+  // Получаем данные каждого тарифа и конструируем ассоциативный массив
+  $allTariffOptions = get_all_tariff_options();
+
+  // Перебираем все тарифы
+  foreach ($allTariffOptions as $tariffOptions) {
+    // Если в опциях тарифа есть поле с ссылками на тарифы
+    if (have_rows('docs', $tariffOptions['id'])) {
+      $message .= "<p><strong>" . $tariffOptions['name'] . "</strong></p><ol>";
+
+      // Для всех записей...
+      while (have_rows('docs', $tariffOptions['id'])) {
+        // ... устанавливаем значения записи
+        the_row();
+
+        // Обнуляем переменные с именем файла (текущим и предыдушим)
+        $previousLocalFilename = "";
+        $currentLocalFilename = "";
+        $oldestLocalFilename = "";
+
+        // Получаем тип файла
+        $typeDoc = get_sub_field('type');
+        // Получаем ссылку на файл тарифа
+        $urlDoc = get_sub_field('url');
+        // Получаем расширение файла тарифа
+        $extDoc = get_sub_field('ext');
+
+        // В зависимости от типа файла формируем имена файлов
+        switch ($typeDoc['value']) {
+          case "all":
+            $previousLocalFilename =
+              "rko_" .
+              $tariffOptions['bank']['slug'] .
+              "_" .
+              $typeDoc['value'] .
+              "_previous." .
+              $extDoc;
+            $currentLocalFilename =
+              "rko_" .
+              $tariffOptions['bank']['slug'] .
+              "_" .
+              $typeDoc['value'] .
+              "_current." .
+              $extDoc;
+            break;
+
+          case "short":
+          case "full":
+          case "full2":
+            $previousLocalFilename =
+              "rko_" .
+              $tariffOptions['slug'] .
+              "_" .
+              $typeDoc['value'] .
+              "_previous." .
+              $extDoc;
+            $currentLocalFilename =
+              "rko_" .
+              $tariffOptions['slug'] .
+              "_" .
+              $typeDoc['value'] .
+              "_current." .
+              $extDoc;
+            break;
+
+          case "html":
+            break;
+        }
+
+        // Если предыдущее или текущее имя не определено, значит это ссылка на html страницу — пропускаем итерацию
+        if (!$previousLocalFilename || !$currentLocalFilename) {
+          continue;
+        }
+
+        // Если файла с текущим тарифом не существует
+        if (!file_exists(TARIFF_DOCS_UPLOAD_DIR . $currentLocalFilename)) {
+          // Фиксируем наличие изменений
+          $haveChanges = true;
+
+          $message .= '<li>' . $typeDoc['label'] . ': ';
+
+          // Скачиваем тариф и сохраняем под текущим именем
+          $errors = download_tariff_docs($urlDoc, $currentLocalFilename);
+
+          // Проверяем есть ли ошибки при скачивании и сохранении
+          // Если переменая ошибок это объект — выводим их
+          if (
+            !is_null($errors) &&
+            is_object($errors) &&
+            $errors->get_error_code()
+          ) {
+            $message .=
+              'файл не найден, <span style="color:red;">ошибки при скачивании:</span>';
+            $message .= '<ul>';
+
+            foreach ($errors->get_error_messages() as $error) {
+              $message .= '<li>' . $error . '</li>';
+            }
+
+            $message .= '</ul></li>'; // $typeDoc['label']
+          } elseif (!is_null($errors) && is_string($errors)) {
+            // Если переменная ошибок это строка, выводим её
+            $message .= '<span style="color:red;">' . $errors . '</span></li>'; // $typeDoc['label']
+          } else {
+            // Если ошибок нет, значит скачен новый файл — выводим сообщение и ссылку на файл
+            $message .=
+              'файл не найден, <span style="color:green;">скачен и сохранен </span><a target="_blank" href="' .
+              TARIFF_DOCS_UPLOAD_URL .
+              $currentLocalFilename .
+              '">' .
+              $currentLocalFilename .
+              '</a></li>'; // $typeDoc['label']
+          }
+        } else {
+          // Файл с тарифом существует
+          // Проверяем размеры текущего локального тарифа и удаленного на сайте банка и если они не совпадают
+          if (
+            filesize(TARIFF_DOCS_UPLOAD_DIR . $currentLocalFilename) !==
+            curl_get_file_size($urlDoc)
+          ) {
+            // Фиксируем наличие изменений
+            $haveChanges = true;
+
+            $message .= '<li>' . $typeDoc['label'] . ': ';
+
+            // Если существует предыдущий файл
+            if (file_exists(TARIFF_DOCS_UPLOAD_DIR . $previousLocalFilename)) {
+              $oldestLocalFilename =
+                date('d-m-Y-G-i-s-') . $previousLocalFilename;
+              // Переименовываем его с меткой времени
+              @rename(
+                TARIFF_DOCS_UPLOAD_DIR . $previousLocalFilename,
+                TARIFF_DOCS_UPLOAD_DIR . $oldestLocalFilename
+              );
+            }
+
+            // Если существует текущий файл
+            if (file_exists(TARIFF_DOCS_UPLOAD_DIR . $currentLocalFilename)) {
+              /// Переименовываем текущий файл тарифа в предыдущий
+              @rename(
+                TARIFF_DOCS_UPLOAD_DIR . $currentLocalFilename,
+                TARIFF_DOCS_UPLOAD_DIR . $previousLocalFilename
+              );
+            }
+
+            // Скачиваем файл с тарифом и сохраняем как текущий тариф
+            download_tariff_docs($urlDoc, $currentLocalFilename);
+
+            // Выводим сообщение и ссылки на старейший, прошлый и текущий тариф
+            $message .= '<span style="color:green;">есть изменения: </span>';
+            $message .= '<ul>';
+
+            if ($oldestLocalFilename) {
+              $message .=
+                '<li><a target="_blank" href="' .
+                TARIFF_DOCS_UPLOAD_URL .
+                $oldestLocalFilename .
+                '">Старейший тариф' .
+                '</a></li>';
+            }
+
+            $message .=
+              '<li><a target="_blank" href="' .
+              TARIFF_DOCS_UPLOAD_URL .
+              $previousLocalFilename .
+              '">Прошлый тариф' .
+              '</a></li>';
+
+            $message .=
+              '<li><a target="_blank" href="' .
+              TARIFF_DOCS_UPLOAD_URL .
+              $currentLocalFilename .
+              '">Новый тариф' .
+              '</a></li>';
+
+            $message .= '</ul></li>'; // $typeDoc['label']
+          }
+        }
+      }
+
+      $message .= "</ol>";
+    }
+  }
+
+  // Подготавливаем служебные поля для письма
+  $to = get_option('admin_email');
+  $subject = 'Новые изменения в тарифах';
+
+  if (!$haveChanges) {
+    $subject = 'Изменений в тарифах нет';
+    $message = '<p>Займись чем-нибудь интересным :)</p>';
+  }
+
+  $headers = [
+    'From: РКО Гуру <noreply@rko.guru>' . "\r\n",
+    'Content-Type: text/html; charset=UTF-8' . "\r\n",
+  ];
+
+  // Отправляем письмо администратору с отчетом
+  wp_mail($to, $subject, $message, $headers);
+}
+
+// Шорткод для тестирования
+add_shortcode('test_rko_calc_cron', 'rko_do_check_update_tariffs_doc');

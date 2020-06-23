@@ -4,11 +4,14 @@
  *
  * @package      RKOCoreFunctionality
  * @author       Yuriy Lysyuk
- * @since        1.2.0
+ * @since        1.3.0
  **/
 
 // Объявляем константы
 require_once YL_DIR . '/rko-calc/inc/defined.php';
+
+// Вспомогательные функции для калькулятора
+require_once YL_DIR . '/rko-calc/inc/helpers.php';
 
 // Регистрируем произвольные типы записей для тарифов и банков
 require_once YL_DIR . '/rko-calc/inc/register-cpt.php';
@@ -33,6 +36,9 @@ require_once YL_DIR . '/rko-calc/inc/calculate.php';
 
 // Добавляем шорткод для вывода калькулятора на странице
 require_once YL_DIR . '/rko-calc/inc/shortcode.php';
+
+// Автоматическая проверка изменения тарифов РКО на сайтах банков
+require_once YL_DIR . '/rko-calc/inc/cron.php';
 
 function rko_calc(WP_REST_Request $request)
 {

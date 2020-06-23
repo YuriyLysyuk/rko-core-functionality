@@ -4,7 +4,7 @@
  *
  * @package      RKOCoreFunctionality
  * @author       Yuriy Lysyuk
- * @since        
+ * @since        1.3.0
  **/
 
 // Изменяем расположение сохранения настроек ACF Local JSON в /acf папку внутри этого плагина

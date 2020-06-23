@@ -4,7 +4,7 @@
  *
  * @package      RKOCoreFunctionality
  * @author       Yuriy Lysyuk
- * @since        1.2.0
+ * @since        1.3.0
  **/
 
 /**
@@ -180,7 +180,7 @@ function rko_calc_rest_api_scripts()
       'rko-calc-js',
       plugins_url('assets/js/rko-calc.min.js', dirname(__FILE__)),
       ['jquery', 'nouislider-js'],
-      false,
+      '1.3.0',
       true
     );
 
