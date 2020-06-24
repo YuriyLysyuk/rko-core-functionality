@@ -220,14 +220,30 @@ function rko_do_check_update_tariffs_doc()
     $message = '<p>Займись чем-нибудь интересным :)</p>';
   }
 
-  $headers = [
-    'From: РКО Гуру <noreply@rko.guru>' . "\r\n",
-    'Content-Type: text/html; charset=UTF-8' . "\r\n",
-  ];
+  // Устанавливаем html формат письма
+  add_filter('wp_mail_content_type', 'rko_set_html_mail_content_type');
+
+  // Устанавливаем имя отправителя письма
+  add_filter('wp_mail_from_name', 'rko_set_mail_from_name');
 
   // Отправляем письмо администратору с отчетом
-  wp_mail($to, $subject, $message, $headers);
+  wp_mail($to, $subject, $message);
+
+  // Сбрасываем фильтр для предотвращения ошибок -- https://core.trac.wordpress.org/ticket/23578
+  remove_filter('wp_mail_content_type', 'rko_set_html_mail_content_type');
 }
 
 // Шорткод для тестирования
 add_shortcode('test_rko_calc_cron', 'rko_do_check_update_tariffs_doc');
+
+// Устанавливаем html формат письма
+function rko_set_html_mail_content_type()
+{
+  return 'text/html';
+}
+
+// Устанавливаем имя отправителя письма
+function rko_set_mail_from_name()
+{
+  return get_option('blogname');
+}
