@@ -12,16 +12,16 @@
 // ToDo: для срабатывания проверки заданий каждые 15 минут, если чаще никто не заходит
 
 // Проверка существования расписания во время работы плагина на всякий пожарный случай
-if (!wp_next_scheduled('rko_check_update_tariffs_doc')) {
+if (!wp_next_scheduled('rko_check_update_tariff_docs')) {
   // Добавляем задание для проверки изменений тарифов РКО дважды в день
-  wp_schedule_event(time(), 'twicedaily', 'rko_check_update_tariffs_doc');
+  wp_schedule_event(time(), 'twicedaily', 'rko_check_update_tariff_docs');
 }
 
 // Добавляем функцию запуска проверки
-add_action('rko_check_update_tariffs_doc', "rko_do_check_update_tariffs_doc");
+add_action('rko_check_update_tariff_docs', "rko_do_check_update_tariff_docs");
 
 // Функция для загрузки и проверки изменений файлов с тарифами с сайтов банков
-function rko_do_check_update_tariffs_doc()
+function rko_do_check_update_tariff_docs()
 {
   // Полный отчет по изменениям
   $message = "";
@@ -213,11 +213,11 @@ function rko_do_check_update_tariffs_doc()
 
   // Подготавливаем служебные поля для письма
   $to = get_option('admin_email');
-  $subject = 'Новые изменения в тарифах';
+  $subject = '[New] Отчет по изменениям в тарифах';
 
   if (!$haveChanges) {
-    $subject = 'Изменений в тарифах нет';
-    $message = '<p>Займись чем-нибудь интересным :)</p>';
+    $subject = 'Отчет по изменениям в тарифах';
+    $message = '<p>Изменений нет. Займись чем-нибудь интересным :)</p>';
   }
 
   // Устанавливаем html формат письма
@@ -234,7 +234,7 @@ function rko_do_check_update_tariffs_doc()
 }
 
 // Шорткод для тестирования
-add_shortcode('test_rko_calc_cron', 'rko_do_check_update_tariffs_doc');
+add_shortcode('test_rko_calc_cron', 'rko_do_check_update_tariff_docs');
 
 // Устанавливаем html формат письма
 function rko_set_html_mail_content_type()
