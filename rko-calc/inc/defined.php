@@ -19,8 +19,10 @@ define(
   YL_DIR . 'rko-calc/acf-data/all-tariff-options-need-update'
 );
 
+$uploadDir = wp_get_upload_dir();
+
 // Директория, где храняться файлы тарифов
-define('TARIFF_DOCS_UPLOAD_DIR', YL_DIR . 'rko-calc/uploads/');
+define('TARIFF_DOCS_UPLOAD_DIR', $uploadDir['basedir'] . '/rko-tariff-docs/');
 
 // URL, где доступны файлы тарифов
-define('TARIFF_DOCS_UPLOAD_URL', YL_URL . 'rko-calc/uploads/');
+define('TARIFF_DOCS_UPLOAD_URL', $uploadDir['baseurl'] . '/rko-tariff-docs/');
