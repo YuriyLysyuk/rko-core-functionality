@@ -25,7 +25,7 @@ function rko_do_check_update_tariff_docs()
 {
   // Полный отчет по изменениям
   $message = "";
-  // Флаг изменений
+  // Обнуляем флаг изменений
   $haveChanges = false;
 
   // Получаем данные каждого тарифа и конструируем ассоциативный массив
@@ -33,10 +33,13 @@ function rko_do_check_update_tariff_docs()
 
   // Перебираем все тарифы
   foreach ($allTariffOptions as $tariffOptions) {
+    // Обнуляем флаг изменений в отдельном тарифу
+    $haveRowChanges = false;
+    // Обнуляем отдельный отчет по изменениям для одного тарифа
+    $rowMessage = "";
+
     // Если в опциях тарифа есть поле с ссылками на тарифы
     if (have_rows('docs', $tariffOptions['id'])) {
-      $message .= "<p><strong>" . $tariffOptions['name'] . "</strong></p><ol>";
-
       // Для всех записей...
       while (have_rows('docs', $tariffOptions['id'])) {
         // ... устанавливаем значения записи
@@ -104,9 +107,9 @@ function rko_do_check_update_tariff_docs()
         // Если файла с текущим тарифом не существует
         if (!file_exists(TARIFF_DOCS_UPLOAD_DIR . $currentLocalFilename)) {
           // Фиксируем наличие изменений
-          $haveChanges = true;
+          $haveChanges = $haveRowChanges = true;
 
-          $message .= '<li>' . $typeDoc['label'] . ': ';
+          $rowMessage .= '<li>' . $typeDoc['label'] . ': ';
 
           // Скачиваем тариф и сохраняем под текущим именем
           $errors = download_tariff_docs($urlDoc, $currentLocalFilename);
@@ -118,21 +121,22 @@ function rko_do_check_update_tariff_docs()
             is_object($errors) &&
             $errors->get_error_code()
           ) {
-            $message .=
+            $rowMessage .=
               'файл не найден, <span style="color:red;">ошибки при скачивании:</span>';
-            $message .= '<ul>';
+            $rowMessage .= '<ul>';
 
             foreach ($errors->get_error_messages() as $error) {
-              $message .= '<li>' . $error . '</li>';
+              $rowMessage .= '<li>' . $error . '</li>';
             }
 
-            $message .= '</ul></li>'; // $typeDoc['label']
+            $rowMessage .= '</ul></li>'; // $typeDoc['label']
           } elseif (!is_null($errors) && is_string($errors)) {
             // Если переменная ошибок это строка, выводим её
-            $message .= '<span style="color:red;">' . $errors . '</span></li>'; // $typeDoc['label']
+            $rowMessage .=
+              '<span style="color:red;">' . $errors . '</span></li>'; // $typeDoc['label']
           } else {
             // Если ошибок нет, значит скачен новый файл — выводим сообщение и ссылку на файл
-            $message .=
+            $rowMessage .=
               'файл не найден, <span style="color:green;">скачен и сохранен </span><a target="_blank" href="' .
               TARIFF_DOCS_UPLOAD_URL .
               $currentLocalFilename .
@@ -148,9 +152,9 @@ function rko_do_check_update_tariff_docs()
             curl_get_file_size($urlDoc)
           ) {
             // Фиксируем наличие изменений
-            $haveChanges = true;
+            $haveChanges = $haveRowChanges = true;
 
-            $message .= '<li>' . $typeDoc['label'] . ': ';
+            $rowMessage .= '<li>' . $typeDoc['label'] . ': ';
 
             // Если существует предыдущий файл
             if (file_exists(TARIFF_DOCS_UPLOAD_DIR . $previousLocalFilename)) {
@@ -176,11 +180,11 @@ function rko_do_check_update_tariff_docs()
             download_tariff_docs($urlDoc, $currentLocalFilename);
 
             // Выводим сообщение и ссылки на старейший, прошлый и текущий тариф
-            $message .= '<span style="color:green;">есть изменения: </span>';
-            $message .= '<ul>';
+            $rowMessage .= '<span style="color:green;">есть изменения: </span>';
+            $rowMessage .= '<ul>';
 
             if ($oldestLocalFilename) {
-              $message .=
+              $rowMessage .=
                 '<li><a target="_blank" href="' .
                 TARIFF_DOCS_UPLOAD_URL .
                 $oldestLocalFilename .
@@ -188,26 +192,32 @@ function rko_do_check_update_tariff_docs()
                 '</a></li>';
             }
 
-            $message .=
+            $rowMessage .=
               '<li><a target="_blank" href="' .
               TARIFF_DOCS_UPLOAD_URL .
               $previousLocalFilename .
               '">Прошлый тариф' .
               '</a></li>';
 
-            $message .=
+            $rowMessage .=
               '<li><a target="_blank" href="' .
               TARIFF_DOCS_UPLOAD_URL .
               $currentLocalFilename .
               '">Новый тариф' .
               '</a></li>';
 
-            $message .= '</ul></li>'; // $typeDoc['label']
+            $rowMessage .= '</ul></li>'; // $typeDoc['label']
           }
         }
       }
 
-      $message .= "</ol>";
+      // Если по тарифу есть изменения, показываем их
+      if ($haveRowChanges) {
+        $message .=
+          "<p><strong>" . $tariffOptions['name'] . "</strong></p><ol>";
+        $message .= $rowMessage;
+        $message .= "</ol>";
+      }
     }
   }
 
