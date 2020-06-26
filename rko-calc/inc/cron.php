@@ -50,72 +50,78 @@ function rko_do_check_update_tariff_docs()
         $currentLocalFilename = "";
         $oldestLocalFilename = "";
 
-        // Получаем тип файла
-        $typeDoc = get_sub_field('type');
-        // Получаем ссылку на файл тарифа
-        $urlDoc = get_sub_field('url');
-        // Получаем расширение файла тарифа
-        $extDoc = get_sub_field('ext');
+        // Получаем поля запими
+        $doc = [
+          'structure' => get_sub_field('structure'),
+          'view' => get_sub_field('view'),
+          'suffix' => get_sub_field('suffix'),
+          'ext' => get_sub_field('ext'),
+          'url' => get_sub_field('url'),
+        ];
 
-        // В зависимости от типа файла формируем имена файлов
-        switch ($typeDoc['value']) {
-          case "all":
-            $previousLocalFilename =
-              "rko_" .
-              $tariffOptions['bank']['slug'] .
-              "_" .
-              $typeDoc['value'] .
-              "_previous." .
-              $extDoc;
-            $currentLocalFilename =
-              "rko_" .
-              $tariffOptions['bank']['slug'] .
-              "_" .
-              $typeDoc['value'] .
-              "_current." .
-              $extDoc;
+        /**
+         * Формируем жесткое имя файла
+         */
+
+        //  Добавляем имя банка или тарифа в зависимости от состава файла
+        switch ($doc['structure']['value']) {
+          case 'common':
+            $previousLocalFilename .= $tariffOptions['bank']['slug'];
+            $currentLocalFilename .= $tariffOptions['bank']['slug'];
             break;
 
-          case "short":
-          case "full":
-          case "full2":
-            $previousLocalFilename =
-              "rko_" .
-              $tariffOptions['slug'] .
-              "_" .
-              $typeDoc['value'] .
-              "_previous." .
-              $extDoc;
-            $currentLocalFilename =
-              "rko_" .
-              $tariffOptions['slug'] .
-              "_" .
-              $typeDoc['value'] .
-              "_current." .
-              $extDoc;
-            break;
-
-          case "html":
+          case "single":
+            $previousLocalFilename .= $tariffOptions['slug'];
+            $currentLocalFilename .= $tariffOptions['slug'];
             break;
         }
 
-        // Если предыдущее или текущее имя не определено, значит это ссылка на html страницу — пропускаем итерацию
-        if (!$previousLocalFilename || !$currentLocalFilename) {
-          continue;
-        }
+        // Состав файла
+        $previousLocalFilename .= '_' . $doc['structure']['value'];
+        $currentLocalFilename .= '_' . $doc['structure']['value'];
+
+        // Вид файла
+        $previousLocalFilename .= '_' . $doc['view']['value'];
+        $currentLocalFilename .= '_' . $doc['view']['value'];
+
+        // Наличие других условий
+        $previousLocalFilename .= '_' . $doc['suffix']['value'];
+        $currentLocalFilename .= '_' . $doc['suffix']['value'];
+
+        // Временная приписка
+        $previousLocalFilename .= '_previous';
+        $currentLocalFilename .= '_current';
+
+        // Расширение
+        $previousLocalFilename .= '.' . $doc['ext'];
+        $currentLocalFilename .= '.' . $doc['ext'];
+
+        // Формируем начало вывода в виде идентификации строки
+        $beginRowMessage = '<li>';
+        $beginRowMessage .= $doc['structure']['label'] . ' ';
+        $beginRowMessage .= $doc['view']['label'] . ', ';
+        $beginRowMessage .=
+          'none' === $doc['suffix']['value']
+            ? ''
+            : $doc['suffix']['label'] . ', ';
+        $beginRowMessage .= $doc['ext'] . ': ';
 
         // Если файла с текущим тарифом не существует
         if (!file_exists(TARIFF_DOCS_UPLOAD_DIR . $currentLocalFilename)) {
           // Фиксируем наличие изменений
           $haveChanges = $haveRowChanges = true;
 
-          $rowMessage .= '<li>' . $typeDoc['label'] . ': ';
+          // Добавляем идентификацию строки
+          $rowMessage .= $beginRowMessage;
 
           // Скачиваем тариф и сохраняем под текущим именем
-          $errors = download_tariff_docs($urlDoc, $currentLocalFilename);
+          $errors = download_tariff_docs($doc['url'], $currentLocalFilename);
 
-          // Проверяем есть ли ошибки при скачивании и сохранении
-          // Если переменая ошибок это объект — выводим их
+          /**
+           * Проверяем есть ли ошибки при скачивании и сохранении
+           */
+
+          // Если переменая ошибок это объект с ошибками — выводим их
           if (
             !is_null($errors) &&
             is_object($errors) &&
@@ -129,11 +135,11 @@ function rko_do_check_update_tariff_docs()
               $rowMessage .= '<li>' . $error . '</li>';
             }
 
-            $rowMessage .= '</ul></li>'; // $typeDoc['label']
+            $rowMessage .= '</ul></li>'; // $doc['structure']['label']
           } elseif (!is_null($errors) && is_string($errors)) {
             // Если переменная ошибок это строка, выводим её
             $rowMessage .=
-              '<span style="color:red;">' . $errors . '</span></li>'; // $typeDoc['label']
+              '<span style="color:red;">' . $errors . '</span></li>'; // $doc['structure']['label']
           } else {
             // Если ошибок нет, значит скачен новый файл — выводим сообщение и ссылку на файл
             $rowMessage .=
@@ -142,24 +148,28 @@ function rko_do_check_update_tariff_docs()
               $currentLocalFilename .
               '">' .
               $currentLocalFilename .
-              '</a></li>'; // $typeDoc['label']
+              '</a></li>'; // $doc['structure']['label']
           }
         } else {
           // Файл с тарифом существует
           // Проверяем размеры текущего локального тарифа и удаленного на сайте банка и если они не совпадают
           if (
             filesize(TARIFF_DOCS_UPLOAD_DIR . $currentLocalFilename) !==
-            curl_get_file_size($urlDoc)
+            curl_get_file_size($doc['url'])
           ) {
             // Фиксируем наличие изменений
             $haveChanges = $haveRowChanges = true;
 
-            $rowMessage .= '<li>' . $typeDoc['label'] . ': ';
+            // Добавляем идентификацию строки
+            $rowMessage .= $beginRowMessage;
 
             // Если существует предыдущий файл
             if (file_exists(TARIFF_DOCS_UPLOAD_DIR . $previousLocalFilename)) {
               $oldestLocalFilename =
-                date('d-m-Y-G-i-s-') . $previousLocalFilename;
+                $previousLocalFilename .
+                date('_d-m-Y-G-i-s') .
+                '.' .
+                $doc['ext'];
               // Переименовываем его с меткой времени
               @rename(
                 TARIFF_DOCS_UPLOAD_DIR . $previousLocalFilename,
@@ -177,7 +187,7 @@ function rko_do_check_update_tariff_docs()
             }
 
             // Скачиваем файл с тарифом и сохраняем как текущий тариф
-            download_tariff_docs($urlDoc, $currentLocalFilename);
+            download_tariff_docs($doc['url'], $currentLocalFilename);
 
             // Выводим сообщение и ссылки на старейший, прошлый и текущий тариф
             $rowMessage .= '<span style="color:green;">есть изменения: </span>';
@@ -206,7 +216,7 @@ function rko_do_check_update_tariff_docs()
               '">Новый тариф' .
               '</a></li>';
 
-            $rowMessage .= '</ul></li>'; // $typeDoc['label']
+            $rowMessage .= '</ul></li>'; // $doc['structure']['label']
           }
         }
       }
@@ -214,7 +224,11 @@ function rko_do_check_update_tariff_docs()
       // Если по тарифу есть изменения, показываем их
       if ($haveRowChanges) {
         $message .=
-          "<p><strong>" . $tariffOptions['name'] . "</strong></p><ol>";
+          "<p><strong>" .
+          $tariffOptions['name'] .
+          ' (' .
+          $tariffOptions['bank']['name']['chto'] .
+          ")</strong></p><ol>";
         $message .= $rowMessage;
         $message .= "</ol>";
       }

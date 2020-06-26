@@ -64,8 +64,8 @@
             "label": "Ссылки на тарифы на сайте банка",
             "name": "docs",
             "type": "repeater",
-            "instructions": "",
-            "required": 0,
+            "instructions": "Используются для отслеживания изменений в тарифах и отправки уведомления на почту.<br>\r\nПоля (<span style=\"color:red;\">комбинация полей должна быть уникальной!)<\/span>:<br>\r\nСостав — наличие в файле одного тарифа или всех<br>\r\nВид — короткая или полная версия тарифа<br>\r\nСуффикс — добавочный суффикс для разделения файлов по другим признакам<br>\r\nРасширение — расширение скачиваемого файла<br>\r\nСсылка — ссылка на файл тарифа на сайте банка",
+            "required": 1,
             "conditional_logic": 0,
             "wrapper": {
                 "width": "",
@@ -80,23 +80,20 @@
             "sub_fields": [
                 {
                     "key": "field_5ef0941d382bc",
-                    "label": "Тип",
-                    "name": "type",
+                    "label": "Состав",
+                    "name": "structure",
                     "type": "select",
                     "instructions": "",
                     "required": 1,
                     "conditional_logic": 0,
                     "wrapper": {
-                        "width": "30",
+                        "width": "15",
                         "class": "",
                         "id": ""
                     },
                     "choices": {
-                        "all": "Один файл на все тарифы",
-                        "short": "Краткая версия",
-                        "full": "Полная версия",
-                        "full2": "Еще одна полная версия",
-                        "html": "HTML-страница"
+                        "common": "общий",
+                        "single": "отдельный"
                     },
                     "default_value": false,
                     "allow_null": 0,
@@ -107,36 +104,73 @@
                     "placeholder": ""
                 },
                 {
-                    "key": "field_5ef0a884382bd",
-                    "label": "Ссылка на файл тарифа",
-                    "name": "url",
-                    "type": "url",
+                    "key": "field_5ef59c28336f0",
+                    "label": "Вид",
+                    "name": "view",
+                    "type": "select",
                     "instructions": "",
                     "required": 1,
                     "conditional_logic": 0,
                     "wrapper": {
-                        "width": "50",
-                        "class": "",
-                        "id": ""
-                    },
-                    "default_value": "",
-                    "placeholder": ""
-                },
-                {
-                    "key": "field_5ef0c7f0eb7f9",
-                    "label": "Расширение файла",
-                    "name": "ext",
-                    "type": "select",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "20",
+                        "width": "15",
                         "class": "",
                         "id": ""
                     },
                     "choices": {
-                        "pdf": "pdf"
+                        "short": "короткий",
+                        "full": "полный"
+                    },
+                    "default_value": false,
+                    "allow_null": 0,
+                    "multiple": 0,
+                    "ui": 0,
+                    "return_format": "array",
+                    "ajax": 0,
+                    "placeholder": ""
+                },
+                {
+                    "key": "field_5ef59c9e336f1",
+                    "label": "Суффикс",
+                    "name": "suffix",
+                    "type": "select",
+                    "instructions": "",
+                    "required": 1,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "15",
+                        "class": "",
+                        "id": ""
+                    },
+                    "choices": {
+                        "none": "нет",
+                        "open": "банк Открытие",
+                        "qiwi": "банк Qiwi"
+                    },
+                    "default_value": "none",
+                    "allow_null": 0,
+                    "multiple": 0,
+                    "ui": 0,
+                    "return_format": "array",
+                    "ajax": 0,
+                    "placeholder": ""
+                },
+                {
+                    "key": "field_5ef0c7f0eb7f9",
+                    "label": "Расширение",
+                    "name": "ext",
+                    "type": "select",
+                    "instructions": "",
+                    "required": 1,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "15",
+                        "class": "",
+                        "id": ""
+                    },
+                    "choices": {
+                        "pdf": "pdf",
+                        "xlsx": "xlsx",
+                        "xls": "xls"
                     },
                     "default_value": false,
                     "allow_null": 1,
@@ -144,6 +178,22 @@
                     "ui": 0,
                     "return_format": "value",
                     "ajax": 0,
+                    "placeholder": ""
+                },
+                {
+                    "key": "field_5ef0a884382bd",
+                    "label": "Ссылка",
+                    "name": "url",
+                    "type": "url",
+                    "instructions": "",
+                    "required": 1,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "40",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
                     "placeholder": ""
                 }
             ]
@@ -2899,5 +2949,5 @@
     "hide_on_screen": "",
     "active": 1,
     "description": "",
-    "modified": "1592915151"
+    "modified": "1593157723"
 }
