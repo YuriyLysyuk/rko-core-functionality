@@ -20,6 +20,9 @@ function download_tariff_docs($url, $newFileName = null)
   // Меняем директорию загрузки файлов с тарифами на нужную
   add_filter('upload_dir', 'rko_calc_custom_upload_directory');
 
+  // Добавляем фильтр с юзерагентом
+  add_filter('http_headers_useragent', 'rko_calc_custom_useragent', 10, 2);
+
   // Загружаем файл во временную папку
   $temp_file = download_url($url);
 
@@ -45,7 +48,6 @@ function download_tariff_docs($url, $newFileName = null)
       // Не удалось переместить временный файл в папку uploads — возвращаем ошибку
       return $results['error'];
     } else {
-
       // $filename = $results['file']; // полный путь до файла
       // $local_url = $results['url']; // URL до файла в папке uploads
       // $type = $results['type']; // MIME тип файла
@@ -59,6 +61,9 @@ function download_tariff_docs($url, $newFileName = null)
 
   // Удаляем фильтр с кастомной директорией для загрузки файлов, чтобы вернуть значения по умолчанию
   remove_filter('upload_dir', 'rko_calc_custom_upload_directory');
+
+  // Удаляем фильтр с юзерагентом
+  remove_filter('http_headers_useragent', 'rko_calc_custom_useragent');
 }
 
 // Директория для загрузки файлов с тарифами
@@ -70,4 +75,14 @@ function rko_calc_custom_upload_directory($args)
   $args['baseurl'] = TARIFF_DOCS_UPLOAD_URL;
 
   return $args;
+}
+
+// Фильтр, возвращающий юзерагент.
+// Сервер Сбербанка не давал загружать pdf-файл со стандартным юзерагентом
+function rko_calc_custom_useragent($user_agent, $url)
+{
+  $user_agent =
+    'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.106 Safari/537.36';
+
+  return $user_agent;
 }
