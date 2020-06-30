@@ -143,7 +143,15 @@ function calculate_range_fee($userParams, $tariffOptions, $context = '')
         ($cond['from'] == 0 && $cond['to'] == 0) ||
         ($cond['from'] > 0 && $cond['to'] == 0)
       ) {
-        $currentFee = $userValue * $condCostPercentToNumber;
+        // Если указан объем пакета
+        if ($cond['pack']) {
+          // Комиссия (цена пакета) для оставшейся суммы складывается за каждый объем, указанный в пакете, включая неполный
+          $currentFee = ceil($userValue / $cond['pack']) * $cond['pack_cost'];
+        } else {
+          // Пакет не указан (равен 0), вычисляем комиссию на текущей итерации
+          $currentFee = $userValue * $condCostPercentToNumber;
+        }
+
         if ($currentFee) {
           // if ($currentFee > $minFee) {
           $calculatedFee += $currentFee;
