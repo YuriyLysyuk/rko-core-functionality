@@ -50,23 +50,29 @@ function rko_calc(WP_REST_Request $request)
 
   // Основной цикл
   foreach ($allTariffOptions as $tariffOptions) {
-    // ID тарифа
-    $tariff['id'] = $tariffOptions['id'];
+    // Определяем для какой формы регистрации производится расчет и устанавливаем соответствующую переменную
+    $userParams['ooo'] ? ($forWhom = 'ooo') : ($forWhom = 'ip');
 
-    // Вычисляем стоимость облуживания по каждому пункту тарифа
-    $tariff['calculated'] = calculate($userParams, $tariffOptions);
+    // Производим расчет только для той формы регистрации, для которой включен тариф
+    if ($tariffOptions['for'] && in_array($forWhom, $tariffOptions['for'])) {
+      // ID тарифа
+      $tariff['id'] = $tariffOptions['id'];
 
-    // Добавляем пользовательские данные в массив
-    $tariff['user_params'] = $userParams;
+      // Вычисляем стоимость облуживания по каждому пункту тарифа
+      $tariff['calculated'] = calculate($userParams, $tariffOptions);
 
-    // Вычисляем общую стоимость обслуживания по тарифу
-    $tariff['calculated_sum'] = 0;
-    foreach ($tariff['calculated'] as $valueToSum) {
-      $tariff['calculated_sum'] += $valueToSum;
+      // Добавляем пользовательские данные в массив
+      $tariff['user_params'] = $userParams;
+
+      // Вычисляем общую стоимость обслуживания по тарифу
+      $tariff['calculated_sum'] = 0;
+      foreach ($tariff['calculated'] as $valueToSum) {
+        $tariff['calculated_sum'] += $valueToSum;
+      }
+
+      // Добавляем всю инфу в общий массив тарифов
+      $tariffs[] = $tariff;
     }
-
-    // Добавляем всю инфу в общий массив тарифов
-    $tariffs[] = $tariff;
   }
 
   // Сортируем тарифы (по умолчанию сортируем по 'calculated_sum' по возрастанию)

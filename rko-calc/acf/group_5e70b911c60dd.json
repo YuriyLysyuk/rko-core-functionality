@@ -41,6 +41,30 @@
             "ui": 1
         },
         {
+            "key": "field_5efaf58d7523c",
+            "label": "Включить тариф для...",
+            "name": "for",
+            "type": "checkbox",
+            "instructions": "Если оставить пустым, тариф не будет показываться в списке",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "30",
+                "class": "",
+                "id": ""
+            },
+            "choices": {
+                "ip": "ИП",
+                "ooo": "ООО"
+            },
+            "allow_custom": 0,
+            "default_value": false,
+            "layout": "vertical",
+            "toggle": 0,
+            "return_format": "value",
+            "save_custom": 0
+        },
+        {
             "key": "field_5e4f5d99d87b8",
             "label": "У банка есть отделения с кассой?",
             "name": "have_cashbox",
