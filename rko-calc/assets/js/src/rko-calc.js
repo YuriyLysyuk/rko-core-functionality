@@ -470,7 +470,11 @@
         // Добавляем в объект с именованием полей динамические поля
         paramsName.personal_transfer = `Перевод <span class="user-value">${moneyFormatWOS.to(
           userParams[param]
-        )} ₽</span> на личную карту в ${tariffOptions.bank.name.gde}`;
+        )} ₽</span> на личную карту в ${
+          tariffOptions.have_personal_card
+            ? tariffOptions.bank.name.gde
+            : "любом банке"
+        }`;
         paramsName.income = `Поступление <span class="user-value">${moneyFormatWOS.to(
           userParams[param]
         )} ₽</span> на счет от юр. лиц и ИП`;

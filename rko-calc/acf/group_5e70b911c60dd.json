@@ -73,7 +73,26 @@
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
-                "width": "",
+                "width": "35",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 1,
+            "ui": 1,
+            "ui_on_text": "Да",
+            "ui_off_text": "Нет"
+        },
+        {
+            "key": "field_5efb088df37af",
+            "label": "У банка есть карты для физ. лиц?",
+            "name": "have_personal_card",
+            "type": "true_false",
+            "instructions": "Если нет — изменится заголовок в детальном описании перевода на личную карту в рейтинге тарифов с названия банка на любой банк",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "35",
                 "class": "",
                 "id": ""
             },
