@@ -570,7 +570,14 @@
           case "get_cashbox":
           case "put_cashbox":
             html += `
-              <div class="result-details-notes-title">Условия тарифа:</div>
+              ${
+                // Если в банке есть касса...
+                tariffOptions.have_cashbox
+                  ? // ...выводим заголовок «Условия тарифа»
+                    '<div class="result-details-notes-title">Условия тарифа:</div>'
+                  : // ...кассы в банке нет. Выводим заголовок «Обратите внимание»
+                    '<div class="result-details-notes-title">Обратите внимание:</div>'
+              }
               <div class="result-details-notes-body">
                 <ul>
                 ${
@@ -579,7 +586,7 @@
                     ? // ...выводим условия параметра в кассе банка
                       tariffOptions[param].cond.map(tariffCondTemplate).join("")
                     : // ...кассы в банке нет. Выводим соответствующее сообщение
-                      "<li>В банке нет физических отделений с кассой, расчет выполнен по условиям операции через банкомат</li>"
+                      "<li>в банке нет физических отделений с кассой, расчет выполнен по условиям операции через банкомат</li>"
                 }
                 </ul>
               </div>
@@ -869,7 +876,7 @@
 
       // Показываем нужное количество результатов
       document.querySelector("#rko-calc-results").innerHTML = `
-        <h2>Личный рейтинг банков для ${isOOO ? "ООО" : "ИП" }</h2>
+        <h2>Личный рейтинг банков для ${isOOO ? "ООО" : "ИП"}</h2>
         <ul class="rko-calc-results-list">
           <div class="preloader"><div class="spin"></div></div>
           ${rkoCalcResults
@@ -965,7 +972,7 @@
           share: function () {
             return {
               url: newUrl,
-              title: "Мой рейтинг банков для открытия расчетного счета:"
+              title: "Мой рейтинг банков для открытия расчетного счета:",
             };
           },
         });
