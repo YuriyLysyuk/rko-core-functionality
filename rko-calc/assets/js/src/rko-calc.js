@@ -986,7 +986,7 @@
         });
       }
 
-      console.log(rkoCalc.allTariffOptions);
+      // console.log(rkoCalc.allTariffOptions);
 
       $.ajax({
         type: "GET",
@@ -1004,7 +1004,7 @@
 
         // При успешном запросе...
         success: function (rkoCalcResults) {
-          console.log(rkoCalcResults);
+          // console.log(rkoCalcResults);
           // ...обнуляем начальный номер результатов...
           rkoCalcResultIndex = 0;
           // ...вывести результаты на экран
