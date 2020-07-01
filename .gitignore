@@ -1,3 +1,3 @@
 node_modules
 *.js.map
-rko-calc/acf-data/*
+/rko-calc/acf-data/*.json
