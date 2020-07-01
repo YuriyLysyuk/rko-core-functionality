@@ -247,7 +247,7 @@ class Kama_Contents {
 		$class_patt = $tag_patt = $level_tags = array();
 		foreach( $tags as $tag ){
 			// class
-			if( $tag{0} == '.' ){
+			if( $tag[0] == '.' ){
 				$tag  = substr( $tag, 1 );
 				$link = & $class_patt;
 			}
@@ -287,7 +287,7 @@ class Kama_Contents {
 		$_is_tit = ! $embed && $_tit;
 
 		// markup
-		$ItemList = $this->opt->markup ? ' itemscope itemtype="http://schema.org/ItemList"' : '';
+		$ItemList = $this->opt->markup ? ' itemscope itemtype="https://schema.org/ItemList"' : '';
 
 		if( isset($this->temp->as_table) ){
 			$contents = '
