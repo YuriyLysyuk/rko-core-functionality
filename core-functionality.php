@@ -2,12 +2,12 @@
 /**
  * Plugin Name: RKO Core Functionality
  * Description: This contains all your site's core functionality so that it is theme independent. <strong>It should always be activated</strong>.
- * Version:     1.3.6
+ * Version:     1.3.7
  * Author:     Yuriy Lysyuk
  * Bitbucket Plugin URI: https://bitbucket.org/lysyuk-y/rko-core-functionality
  *
  * @package    RKOCoreFunctionality
- * @since      1.3.6
+ * @since      1.3.7
  * @copyright  Copyright (c) 2019, Yuriy Lysyuk
  */
 
