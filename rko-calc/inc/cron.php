@@ -4,7 +4,7 @@
  *
  * @package      RKOCoreFunctionality
  * @author       Yuriy Lysyuk
- * @since        1.3.0
+ * @since        1.3.7
  **/
 
 // ToDo: В crontab нужно добавить строку
@@ -152,10 +152,14 @@ function rko_do_check_update_tariff_docs()
           }
         } else {
           // Файл с тарифом существует
-          // Проверяем размеры текущего локального тарифа и удаленного на сайте банка и если они не совпадают
+
+          // Получаем размер файла с тарифом на сайте банка, в случае ошибки возвращает -1
+          $curlGetFileSize = curl_get_file_size($doc['url']);
+          // Проверяем размеры текущего локального тарифа и удаленного на сайте банка
+          // и если они не совпадают
           if (
             filesize(TARIFF_DOCS_UPLOAD_DIR . $currentLocalFilename) !==
-            curl_get_file_size($doc['url'])
+            $curlGetFileSize
           ) {
             // Фиксируем наличие изменений
             $haveChanges = $haveRowChanges = true;
@@ -163,60 +167,71 @@ function rko_do_check_update_tariff_docs()
             // Добавляем идентификацию строки
             $rowMessage .= $beginRowMessage;
 
-            // Если существует предыдущий файл
-            if (file_exists(TARIFF_DOCS_UPLOAD_DIR . $previousLocalFilename)) {
-              $oldestLocalFilename =
-                $previousLocalFilename .
-                date('_d-m-Y-G-i-s') .
-                '.' .
-                $doc['ext'];
-              // Переименовываем его с меткой времени
-              @rename(
-                TARIFF_DOCS_UPLOAD_DIR . $previousLocalFilename,
-                TARIFF_DOCS_UPLOAD_DIR . $oldestLocalFilename
-              );
-            }
+            // Если не было ошибки при загрузке файла с сайта банка
+            if ($curlGetFileSize !== -1) {
+              // Если существует предыдущий файл
+              if (
+                file_exists(TARIFF_DOCS_UPLOAD_DIR . $previousLocalFilename)
+              ) {
+                $oldestLocalFilename =
+                  $previousLocalFilename .
+                  date('_d-m-Y-G-i-s') .
+                  '.' .
+                  $doc['ext'];
+                // Переименовываем его с меткой времени
+                @rename(
+                  TARIFF_DOCS_UPLOAD_DIR . $previousLocalFilename,
+                  TARIFF_DOCS_UPLOAD_DIR . $oldestLocalFilename
+                );
+              }
 
-            // Если существует текущий файл
-            if (file_exists(TARIFF_DOCS_UPLOAD_DIR . $currentLocalFilename)) {
-              /// Переименовываем текущий файл тарифа в предыдущий
-              @rename(
-                TARIFF_DOCS_UPLOAD_DIR . $currentLocalFilename,
-                TARIFF_DOCS_UPLOAD_DIR . $previousLocalFilename
-              );
-            }
+              // Если существует текущий файл
+              if (file_exists(TARIFF_DOCS_UPLOAD_DIR . $currentLocalFilename)) {
+                /// Переименовываем текущий файл тарифа в предыдущий
+                @rename(
+                  TARIFF_DOCS_UPLOAD_DIR . $currentLocalFilename,
+                  TARIFF_DOCS_UPLOAD_DIR . $previousLocalFilename
+                );
+              }
 
-            // Скачиваем файл с тарифом и сохраняем как текущий тариф
-            download_tariff_docs($doc['url'], $currentLocalFilename);
+              // Скачиваем файл с тарифом и сохраняем как текущий тариф
+              download_tariff_docs($doc['url'], $currentLocalFilename);
 
-            // Выводим сообщение и ссылки на старейший, прошлый и текущий тариф
-            $rowMessage .= '<span style="color:green;">есть изменения: </span>';
-            $rowMessage .= '<ul>';
+              // Выводим сообщение и ссылки на старейший, прошлый и текущий тариф
+              $rowMessage .=
+                '<span style="color:green;">есть изменения: </span>';
+              $rowMessage .= '<ul>';
 
-            if ($oldestLocalFilename) {
+              if ($oldestLocalFilename) {
+                $rowMessage .=
+                  '<li><a target="_blank" href="' .
+                  TARIFF_DOCS_UPLOAD_URL .
+                  $oldestLocalFilename .
+                  '">Старейший тариф' .
+                  '</a></li>';
+              }
+
               $rowMessage .=
                 '<li><a target="_blank" href="' .
                 TARIFF_DOCS_UPLOAD_URL .
-                $oldestLocalFilename .
-                '">Старейший тариф' .
+                $previousLocalFilename .
+                '">Прошлый тариф' .
                 '</a></li>';
+
+              $rowMessage .=
+                '<li><a target="_blank" href="' .
+                TARIFF_DOCS_UPLOAD_URL .
+                $currentLocalFilename .
+                '">Новый тариф' .
+                '</a></li>';
+              $rowMessage .= '</ul>';
+            } else {
+              // Ошибка при загрузке файла с сайта для определения размера
+              $rowMessage .=
+                '<span style="color:red;">ошибка при загрузке файла с сайта для определения размера</span>';
             }
 
-            $rowMessage .=
-              '<li><a target="_blank" href="' .
-              TARIFF_DOCS_UPLOAD_URL .
-              $previousLocalFilename .
-              '">Прошлый тариф' .
-              '</a></li>';
-
-            $rowMessage .=
-              '<li><a target="_blank" href="' .
-              TARIFF_DOCS_UPLOAD_URL .
-              $currentLocalFilename .
-              '">Новый тариф' .
-              '</a></li>';
-
-            $rowMessage .= '</ul></li>'; // $doc['structure']['label']
+            $rowMessage .= '</li>'; // $doc['structure']['label']
           }
         }
       }
