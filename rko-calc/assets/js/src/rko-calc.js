@@ -454,15 +454,7 @@
 
         // Если параметр (из списка) не задан пользователем, перейти к следующему параметру
         if (
-          (param == "income" ||
-            param == "people_transfer" ||
-            param == "personal_transfer" ||
-            param == "get_atm" ||
-            param == "get_cashbox" ||
-            param == "put_atm" ||
-            param == "put_cashbox" ||
-            param == "payment_order" ||
-            param == "corp_card" ||
+          (param == "corp_card" ||
             param == "sms") &&
           !userParams[param]
         )
@@ -631,17 +623,31 @@
           case "service":
             // Если обсуживание счета не бесплатное — выводим условия тарифа
             if (tariffCalculated[param]) {
+              // Вытаскиваем стоимость одного месяца
+              let oneMonthCost = tariffOptions[param].cond.find(
+                ({ period }) => period === 1
+              ).cost;
               html += `
                 <div class="result-details-notes-title">Условия тарифа:</div>
                 <div class="result-details-notes-body">
                   <ul>
                   ${tariffOptions[param].cond
-                    .map(
-                      (cond) =>
-                        `<li>${cond.period} мес — ${moneyFormatWOS.to(
+                    .map((cond) => {
+                      // Если это стоимость за один месяц — выводим ее
+                      if (cond.period == 1) {
+                        return `<li>${cond.period} мес — ${moneyFormatWOS.to(
                           cond.cost
-                        )} ₽</li>`
-                    )
+                        )} ₽</li>`;
+                      } else {
+                        // Это стоимость при оплате за несколько месяцев — пересчитаем стоимость на один месяц
+                        // и стоимость скидки от оплаты помесячно и выведем их
+                        return `<li>${cond.period} мес — ${moneyFormatWOS.to(
+                          cond.cost / cond.period
+                        )} ₽/мес (скидка ${moneyFormatWOS.to(
+                          oneMonthCost * cond.period - cond.cost
+                        )} ₽)</li>`;
+                      }
+                    })
                     .join("")}
                   </ul>
                 </div>
