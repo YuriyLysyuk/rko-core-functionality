@@ -454,15 +454,7 @@
 
         // Если параметр (из списка) не задан пользователем, перейти к следующему параметру
         if (
-          (param == "income" ||
-            param == "people_transfer" ||
-            param == "personal_transfer" ||
-            param == "get_atm" ||
-            param == "get_cashbox" ||
-            param == "put_atm" ||
-            param == "put_cashbox" ||
-            param == "payment_order" ||
-            param == "corp_card" ||
+          (param == "corp_card" ||
             param == "sms") &&
           !userParams[param]
         )
