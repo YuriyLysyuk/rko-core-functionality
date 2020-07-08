@@ -61,17 +61,17 @@ function rko_calc_shortcode()
         <input type='text' name='payment_order' id='payment_order' value='0' data-value='$payment_order'>
         <div id='payment_order-slider'></div>
       </div>
-      
-      <label class='rko-calc-field-label' for='people_transfer'>Переводы физ. лицам</label>
-      <div class='rko-calc-field-slider'>
-        <input type='text' name='people_transfer' id='people_transfer' value='0' data-value='$people_transfer'>
-        <div id='people_transfer-slider'></div>
-      </div>
 
       <label class='rko-calc-field-label' for='personal_transfer'>Переводы себе на карту</label>
       <div class='rko-calc-field-slider'>
         <input type='text' name='personal_transfer' id='personal_transfer' value='0' data-value='$personal_transfer'> 
         <div id='personal_transfer-slider'></div>
+      </div>
+      
+      <label class='rko-calc-field-label' for='people_transfer'>Переводы физ. лицам</label>
+      <div class='rko-calc-field-slider'>
+        <input type='text' name='people_transfer' id='people_transfer' value='0' data-value='$people_transfer'>
+        <div id='people_transfer-slider'></div>
       </div>
   ";
   $form .= '
