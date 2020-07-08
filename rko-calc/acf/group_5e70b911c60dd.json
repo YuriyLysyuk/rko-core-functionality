@@ -186,8 +186,11 @@
                     },
                     "choices": {
                         "none": "нет",
-                        "open": "банк Открытие",
-                        "qiwi": "банк Qiwi"
+                        "extra1": "extra1",
+                        "extra2": "extra2",
+                        "extra3": "extra3",
+                        "extra4": "extra4",
+                        "extra5": "extra5"
                     },
                     "default_value": "none",
                     "allow_null": 0,
@@ -3576,5 +3579,5 @@
     "hide_on_screen": "",
     "active": 1,
     "description": "",
-    "modified": "1593511433"
+    "modified": "1594225073"
 }
