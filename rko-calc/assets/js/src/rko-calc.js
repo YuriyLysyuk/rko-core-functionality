@@ -453,11 +453,7 @@
         if (param == "personal_transfer" && userParams.ooo) continue;
 
         // Если параметр (из списка) не задан пользователем, перейти к следующему параметру
-        if (
-          (param == "corp_card" ||
-            param == "sms") &&
-          !userParams[param]
-        )
+        if ((param == "corp_card" || param == "sms") && !userParams[param])
           continue;
 
         // Если это первый выводимый параметр...
@@ -581,12 +577,27 @@
               <div class="result-details-notes-body">
                 <ul>
                 ${
-                  // Если в банке есть касса...
-                  tariffOptions.have_cashbox
-                    ? // ...выводим условия параметра в кассе банка
-                      tariffOptions[param].cond.map(tariffCondTemplate).join("")
-                    : // ...кассы в банке нет. Выводим соответствующее сообщение
+                  // Если в банке нет кассы...
+                  !tariffOptions.have_cashbox
+                    ? // ...выводим соответствующее сообщение
                       "<li>в банке нет физических отделений с кассой, расчет выполнен по условиям операции через банкомат</li>"
+                    : // ...касса в банке есть. Если расчет был для ИП...
+                    !userParams.ooo
+                    ? // ...вывести условия для ИП
+                      tariffOptions[param].cond.map(tariffCondTemplate).join("")
+                    : // Расчет для ООО. Если нет свойства same_for_ooo или тарифы для ООО такие же как для ИП...
+                    !tariffOptions[param].hasOwnProperty("same_for_ooo") ||
+                      tariffOptions[param].same_for_ooo
+                    ? // ...выводим условия для ИП
+                      tariffOptions[param].cond.map(tariffCondTemplate).join("")
+                    : // ...для ООО заданы отдельные тарифы, проверяем что существует параметры условий для ООО
+                    tariffOptions[param].hasOwnProperty("cond_ooo")
+                    ? // и выводим их
+                      tariffOptions[param].cond_ooo
+                        .map(tariffCondTemplate)
+                        .join("")
+                    : // иначе ничего не выводим — до этого дойти не должно
+                      ""
                 }
                 </ul>
               </div>
@@ -740,6 +751,7 @@
 
             case "people_transfer":
             case "get_atm":
+            case "get_cashbox":
               // Если расчет был для ООО и для него заданы собственные условия...
               userParams.ooo && !tariffOptions[param].same_for_ooo
                 ? // ...используем инфу для ООО

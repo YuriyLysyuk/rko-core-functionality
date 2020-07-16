@@ -2307,7 +2307,7 @@
             "sub_fields": [
                 {
                     "key": "field_5e2804aebc69e",
-                    "label": "Условия тарифа",
+                    "label": "Условия тарифа для ИП",
                     "name": "cond",
                     "type": "repeater",
                     "instructions": "Пакет — если указан, комиссия (цена пакета) для оставшейся суммы складывается за каждый объем, указанный в пакете, включая неполный",
@@ -2506,7 +2506,7 @@
                 },
                 {
                     "key": "field_5e2804aebc6a3",
-                    "label": "Дополнительная информация",
+                    "label": "Дополнительная информация для ИП",
                     "name": "info",
                     "type": "repeater",
                     "instructions": "Как сэкономить еще больше? Что банк написал мелким шрифтом?",
@@ -2551,6 +2551,306 @@
                         },
                         {
                             "key": "field_5e2804aebc6a5",
+                            "label": "Текст",
+                            "name": "text",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "70",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": "",
+                            "maxlength": ""
+                        }
+                    ]
+                },
+                {
+                    "key": "field_5f10211a430ea",
+                    "label": "Условия тарифа для ООО те же?",
+                    "name": "same_for_ooo",
+                    "type": "true_false",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "message": "",
+                    "default_value": 1,
+                    "ui": 1,
+                    "ui_on_text": "Да",
+                    "ui_off_text": "Нет"
+                },
+                {
+                    "key": "field_5f10211e430eb",
+                    "label": "Условия тарифа для ООО",
+                    "name": "cond_ooo",
+                    "type": "repeater",
+                    "instructions": "Пакет — если указан, комиссия (цена пакета) для оставшейся суммы складывается за каждый объем, указанный в пакете, включая неполный",
+                    "required": 1,
+                    "conditional_logic": [
+                        [
+                            {
+                                "field": "field_5f10211a430ea",
+                                "operator": "!=",
+                                "value": "1"
+                            }
+                        ]
+                    ],
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "collapsed": "",
+                    "min": 0,
+                    "max": 0,
+                    "layout": "block",
+                    "button_label": "",
+                    "sub_fields": [
+                        {
+                            "key": "field_5f10211f430ec",
+                            "label": "Начало диапазона, ₽",
+                            "name": "from",
+                            "type": "number",
+                            "instructions": "",
+                            "required": 1,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "28",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "placeholder": "",
+                            "prepend": "от",
+                            "append": "",
+                            "min": 0,
+                            "max": "",
+                            "step": ""
+                        },
+                        {
+                            "key": "field_5f10211f430ed",
+                            "label": "Конец диапазона, ₽",
+                            "name": "to",
+                            "type": "number",
+                            "instructions": "",
+                            "required": 1,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "27",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "placeholder": "",
+                            "prepend": "до",
+                            "append": "",
+                            "min": 0,
+                            "max": "",
+                            "step": ""
+                        },
+                        {
+                            "key": "field_5f10211f430ee",
+                            "label": "Цена, %",
+                            "name": "cost",
+                            "type": "number",
+                            "instructions": "",
+                            "required": 1,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "15",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": "",
+                            "min": 0,
+                            "max": "",
+                            "step": ""
+                        },
+                        {
+                            "key": "field_5f10211f430ef",
+                            "label": "Плюс, ₽",
+                            "name": "plus",
+                            "type": "number",
+                            "instructions": "",
+                            "required": 1,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "15",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": "",
+                            "min": 0,
+                            "max": "",
+                            "step": ""
+                        },
+                        {
+                            "key": "field_5f10211f430f0",
+                            "label": "Мин., ₽",
+                            "name": "min_cost",
+                            "type": "number",
+                            "instructions": "",
+                            "required": 1,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "15",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": "",
+                            "min": 0,
+                            "max": "",
+                            "step": ""
+                        },
+                        {
+                            "key": "field_5f10211f430f1",
+                            "label": "Пакет, ₽",
+                            "name": "pack",
+                            "type": "number",
+                            "instructions": "",
+                            "required": 1,
+                            "conditional_logic": [
+                                [
+                                    {
+                                        "field": "field_5f10211f430ed",
+                                        "operator": "==",
+                                        "value": "0"
+                                    },
+                                    {
+                                        "field": "field_5f10211f430ee",
+                                        "operator": "==",
+                                        "value": "0"
+                                    },
+                                    {
+                                        "field": "field_5f10211f430ef",
+                                        "operator": "==",
+                                        "value": "0"
+                                    },
+                                    {
+                                        "field": "field_5f10211f430f0",
+                                        "operator": "==",
+                                        "value": "0"
+                                    }
+                                ]
+                            ],
+                            "wrapper": {
+                                "width": "28",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": "",
+                            "min": 0,
+                            "max": "",
+                            "step": 1
+                        },
+                        {
+                            "key": "field_5f10211f430f2",
+                            "label": "Цена пакета, ₽",
+                            "name": "pack_cost",
+                            "type": "number",
+                            "instructions": "",
+                            "required": 1,
+                            "conditional_logic": [
+                                [
+                                    {
+                                        "field": "field_5f10211f430f1",
+                                        "operator": ">",
+                                        "value": "0"
+                                    }
+                                ]
+                            ],
+                            "wrapper": {
+                                "width": "27",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": "",
+                            "min": 0,
+                            "max": "",
+                            "step": 1
+                        }
+                    ]
+                },
+                {
+                    "key": "field_5f102124430f3",
+                    "label": "Дополнительная информация для ООО",
+                    "name": "info_ooo",
+                    "type": "repeater",
+                    "instructions": "Как сэкономить еще больше? Что банк написал мелким шрифтом?",
+                    "required": 0,
+                    "conditional_logic": [
+                        [
+                            {
+                                "field": "field_5f10211a430ea",
+                                "operator": "!=",
+                                "value": "1"
+                            }
+                        ]
+                    ],
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "collapsed": "",
+                    "min": 0,
+                    "max": 0,
+                    "layout": "table",
+                    "button_label": "",
+                    "sub_fields": [
+                        {
+                            "key": "field_5f102124430f4",
+                            "label": "Тип информации",
+                            "name": "type",
+                            "type": "select",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "30",
+                                "class": "",
+                                "id": ""
+                            },
+                            "choices": {
+                                "idea": "Идея для экономии",
+                                "small": "Мелким шрифтом",
+                                "warning": "Предупреждение"
+                            },
+                            "default_value": false,
+                            "allow_null": 0,
+                            "multiple": 0,
+                            "ui": 0,
+                            "ajax": 0,
+                            "return_format": "value",
+                            "placeholder": ""
+                        },
+                        {
+                            "key": "field_5f102124430f5",
                             "label": "Текст",
                             "name": "text",
                             "type": "text",
@@ -3579,5 +3879,5 @@
     "hide_on_screen": "",
     "active": 1,
     "description": "",
-    "modified": "1594225073"
+    "modified": "1594901862"
 }
