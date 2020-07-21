@@ -3803,61 +3803,6 @@
                     },
                     "default_value": "",
                     "placeholder": ""
-                },
-                {
-                    "key": "field_5e255d141b0e5",
-                    "label": "Onclick события",
-                    "name": "onclick",
-                    "type": "group",
-                    "instructions": "Для размещения целей метрик",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "layout": "block",
-                    "sub_fields": [
-                        {
-                            "key": "field_5e255e321b0e6",
-                            "label": "В списке калькулятора",
-                            "name": "calc_list",
-                            "type": "text",
-                            "instructions": "Содержимое для конструкции onclick=\"\"",
-                            "required": 0,
-                            "conditional_logic": 0,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "default_value": "",
-                            "placeholder": "",
-                            "prepend": "",
-                            "append": "",
-                            "maxlength": ""
-                        },
-                        {
-                            "key": "field_5e255e541b0e7",
-                            "label": "В расширенном описании тарифа в калькуляторе",
-                            "name": "calc_ext",
-                            "type": "text",
-                            "instructions": "Содержимое для конструкции onclick=\"\"",
-                            "required": 0,
-                            "conditional_logic": 0,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "default_value": "",
-                            "placeholder": "",
-                            "prepend": "",
-                            "append": "",
-                            "maxlength": ""
-                        }
-                    ]
                 }
             ]
         }
@@ -3879,5 +3824,5 @@
     "hide_on_screen": "",
     "active": 1,
     "description": "",
-    "modified": "1594901862"
+    "modified": "1595349339"
 }
