@@ -837,7 +837,7 @@
           <div class="result-button-wrap">
             <a href="${
               tariffOptions.button.url
-            }" target="_blank" onclick="${tariffOptions.button.onclick.calc_list}" class="result-button button button-small button-outline">Перейти на сайт</a>
+            }" target="_blank" class="result-button button button-small button-outline" data-tariffname="${tariffOptions.name}" data-bankname="${tariffOptions.bank.name.chto}">Перейти на сайт</a>
           </div>
           <div class="result-details-wrap">
             ${tariffDetails(
@@ -848,7 +848,7 @@
             <div class="result-details-button-wrap">
               <a href="${
                 tariffOptions.button.url
-              }" target="_blank" onclick="${tariffOptions.button.onclick.calc_ext}" class="result-details-button button button-small">Открыть счет с тарифом «${tariffOptions.name}»</a>
+              }" target="_blank" class="result-details-button button button-small" data-tariffname="${tariffOptions.name}" data-bankname="${tariffOptions.bank.name.chto}">Открыть счет с тарифом «${tariffOptions.name}»</a>
             </div>
           </div>
         </li>
