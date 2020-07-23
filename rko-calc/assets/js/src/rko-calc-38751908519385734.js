@@ -823,7 +823,12 @@
             }</div>
           </div>
           <div class="result-tariff">
-            <div class="result-tariff-label">Тариф</div>
+            <div class="result-tariff-label">Тариф
+              ${
+                tariffOptions.docs_date !== undefined
+                  ? "от " + tariffOptions.docs_date
+                  : ""
+              }</div>
             <div class="result-tariff-name">${tariffOptions.name}</div>
           </div>
           <div class="result-calculated">

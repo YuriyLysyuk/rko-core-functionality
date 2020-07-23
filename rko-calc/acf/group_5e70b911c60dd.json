@@ -245,6 +245,25 @@
             ]
         },
         {
+            "key": "field_5f19506ad4a67",
+            "label": "Дата начала действия тарифов",
+            "name": "docs_date",
+            "type": "text",
+            "instructions": "Формат «07.07.2020»",
+            "required": 1,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "maxlength": ""
+        },
+        {
             "key": "field_5e1ad5dd30145",
             "label": "Стоимость открытия счета",
             "name": "opening_cost",
@@ -3824,5 +3843,5 @@
     "hide_on_screen": "",
     "active": 1,
     "description": "",
-    "modified": "1595349339"
+    "modified": "1595494717"
 }
