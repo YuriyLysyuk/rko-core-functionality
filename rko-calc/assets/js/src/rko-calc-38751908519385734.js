@@ -170,6 +170,7 @@
       // Создаем слайдеры с параметрами
       noUiSlider.create(inputSlider, {
         start: 0,
+        behaviour: "none",
         connect: "lower",
         range: params.range,
         format: params.numberFormat,
