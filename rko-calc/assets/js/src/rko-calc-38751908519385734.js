@@ -972,8 +972,8 @@
       // Подготавливаем сериализованную строку с помощью собственной функции
       let rkoCalcFormData = serialize(rkoCalcForm[0]);
 
-      // Если этот вызов ajax не при загрузке страницы
-      if (!isAjaxOnLoad) {
+      // Если этот вызов ajax не при загрузке страницы и загружается главная страница
+      if (!isAjaxOnLoad && window.location.pathname === "/") {
         // Получаем текущий URL без параметров
         let baseUrl =
           window.location.protocol +
