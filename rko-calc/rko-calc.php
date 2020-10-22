@@ -4,7 +4,7 @@
  *
  * @package      RKOCoreFunctionality
  * @author       Yuriy Lysyuk
- * @since        1.3.0
+ * @since        1.3.21
  **/
 
 // Объявляем константы
@@ -48,8 +48,27 @@ function rko_calc(WP_REST_Request $request)
   // Получаем данные каждого тарифа и конструируем ассоциативный массив
   $allTariffOptions = get_all_tariff_options();
 
+  // Переводим строку с используемыми банками для расчета в массив
+  $usedBanks = explode(",", $userParams['banks']);
+  // По умолчанию используются все банки
+  $useCustomBanks = false;
+  // Если указаны не все, а конкретные банки
+  if (!in_array("all", $usedBanks, true)) {
+    // Используются вручную заданные банки
+    $useCustomBanks = true;
+  }
+
   // Основной цикл
   foreach ($allTariffOptions as $tariffOptions) {
+    // Если указаны кастомные банки и они не соответствуют текущему тарифу в итерации
+    if (
+      $useCustomBanks &&
+      !in_array($tariffOptions['bank']['slug'], $usedBanks, true)
+    ) {
+      // Пропускаем текущию итерацию
+      continue;
+    }
+
     // Определяем для какой формы регистрации производится расчет и устанавливаем соответствующую переменную
     $userParams['ooo'] ? ($forWhom = 'ooo') : ($forWhom = 'ip');
 

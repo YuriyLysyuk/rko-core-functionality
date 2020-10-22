@@ -4,15 +4,23 @@
  *
  * @package      RKOCoreFunctionality
  * @author       Yuriy Lysyuk
- * @since        1.3.9
+ * @since        1.3.21
  **/
 
 /**
  * Добавляем шорткод для вывода калькулятора на странице
  *
  */
-function rko_calc_shortcode()
+function rko_calc_shortcode($atts)
 {
+  // Параметры шорткода по умолчанию
+  $params = shortcode_atts(
+    [
+      'banks' => 'all', // Показывать тарифы всех банков
+    ],
+    $atts
+  );
+
   // Проверяем наличие переменных в URL и используем их если есть
   $checkedIP = empty($_GET['ooo']) ? "checked" : "";
   $checkedOOO = isset($_GET['ooo']) && $_GET['ooo'] == "1" ? "checked" : "";
@@ -111,6 +119,7 @@ function rko_calc_shortcode()
         <input type='text' name='put_cashbox' id='put_cashbox' placeholder='' value='0' data-value='$put_cashbox'>
         <div id='put_cashbox-slider'></div>
       </div>
+      <input type='hidden' name='banks' value='{$params['banks']}'>
     </form>
     <div id='rko-calc-results'>
     <ul class='rko-calc-results-list'>
