@@ -908,7 +908,7 @@
 
       // Показываем нужное количество результатов
       document.querySelector("#rko-calc-results").innerHTML = `
-        <h2>Личный рейтинг банков для ${isOOO ? "ООО" : "ИП"}</h2>
+        <h2>Личный рейтинг тарифов для ${isOOO ? "ООО" : "ИП"}</h2>
         <ul class="rko-calc-results-list">
           <div class="preloader"><div class="spin"></div></div>
           ${rkoCalcResults

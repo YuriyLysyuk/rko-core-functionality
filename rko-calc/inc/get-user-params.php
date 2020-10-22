@@ -4,7 +4,7 @@
  *
  * @package      RKOCoreFunctionality
  * @author       Yuriy Lysyuk
- * @since        1.3.0
+ * @since        1.3.21
  **/
 
 function get_user_params(WP_REST_Request $request)
@@ -22,7 +22,8 @@ function get_user_params(WP_REST_Request $request)
     'put_atm' => $request['put_atm'],
     'put_cashbox' => $request['put_cashbox'],
     'corp_card' => $request['corp_card'],
-    'sms' => $request['sms']
+    'sms' => $request['sms'],
+    'banks' => $request['banks'],
   ];
 
   return $userParams;
