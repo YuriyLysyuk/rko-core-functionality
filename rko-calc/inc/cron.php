@@ -4,7 +4,7 @@
  *
  * @package      RKOCoreFunctionality
  * @author       Yuriy Lysyuk
- * @since        1.3.7
+ * @since        1.3.23
  **/
 
 // ToDo: В crontab нужно добавить строку
