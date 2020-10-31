@@ -96,6 +96,10 @@ function rko_do_check_update_tariff_docs()
         $previousLocalFilename .= '.' . $doc['ext'];
         $currentLocalFilename .= '.' . $doc['ext'];
 
+        // Временная метка для ссылки на скачивание.
+        // Нужна что бы браузер не использовал кэшированный файл, так как имя файла одинаковое всегда.
+        $timeStamp = time();
+
         // Формируем начало вывода в виде идентификации строки
         $beginRowMessage = '<li>';
         $beginRowMessage .= $doc['structure']['label'] . ' ';
@@ -146,6 +150,8 @@ function rko_do_check_update_tariff_docs()
               'файл не найден, <span style="color:green;">скачен и сохранен </span><a target="_blank" href="' .
               TARIFF_DOCS_UPLOAD_URL .
               $currentLocalFilename .
+              '?' .
+              $timeStamp .
               '">' .
               $currentLocalFilename .
               '</a></li>'; // $doc['structure']['label']
@@ -207,6 +213,8 @@ function rko_do_check_update_tariff_docs()
                   '<li><a target="_blank" href="' .
                   TARIFF_DOCS_UPLOAD_URL .
                   $oldestLocalFilename .
+                  '?' .
+                  $timeStamp .
                   '">Старейший тариф' .
                   '</a></li>';
               }
@@ -215,6 +223,8 @@ function rko_do_check_update_tariff_docs()
                 '<li><a target="_blank" href="' .
                 TARIFF_DOCS_UPLOAD_URL .
                 $previousLocalFilename .
+                '?' .
+                $timeStamp .
                 '">Прошлый тариф' .
                 '</a></li>';
 
@@ -222,6 +232,8 @@ function rko_do_check_update_tariff_docs()
                 '<li><a target="_blank" href="' .
                 TARIFF_DOCS_UPLOAD_URL .
                 $currentLocalFilename .
+                '?' .
+                $timeStamp .
                 '">Новый тариф' .
                 '</a></li>';
               $rowMessage .= '</ul>';
