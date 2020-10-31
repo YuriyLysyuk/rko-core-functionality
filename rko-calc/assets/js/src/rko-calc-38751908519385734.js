@@ -606,17 +606,15 @@
             break;
 
           case "income":
-            // Если поступления на счет не бесплатные — выводим условия тарифа
-            if (tariffCalculated[param]) {
-              html += `
-                <div class="result-details-notes-title">Условия тарифа:</div>
-                <div class="result-details-notes-body">
-                  <ul>
-                  ${tariffOptions[param].cond.map(tariffCondTemplate).join("")}
-                  </ul>
-                </div>
-              `;
-            }
+            // Выводим условия тарифа за поступления на счет
+            html += `
+              <div class="result-details-notes-title">Условия тарифа:</div>
+              <div class="result-details-notes-body">
+                <ul>
+                ${tariffOptions[param].cond.map(tariffCondTemplate).join("")}
+                </ul>
+              </div>
+            `;
             break;
 
           case "put_atm":
