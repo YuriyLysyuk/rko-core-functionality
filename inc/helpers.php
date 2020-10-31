@@ -67,6 +67,9 @@ function curl_get_file_size($url)
   // Assume failure.
   $result = -1;
 
+  $timeStamp = time();
+  $url .= '?' . $timeStamp;
+
   $curl = curl_init($url);
 
   // Issue a HEAD request and follow any redirects.
@@ -74,6 +77,7 @@ function curl_get_file_size($url)
   curl_setopt($curl, CURLOPT_HEADER, true);
   curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
   curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+  curl_setopt($curl, CURLOPT_FRESH_CONNECT, true);
   // curl_setopt($curl, CURLOPT_USERAGENT, get_user_agent_string());
 
   $data = curl_exec($curl);
