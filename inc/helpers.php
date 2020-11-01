@@ -4,7 +4,7 @@
  *
  * @package      RKOCoreFunctionality
  * @author       Yuriy Lysyuk
- * @since        1.3.23
+ * @since        1.3.25
  **/
 
 /**
@@ -66,9 +66,6 @@ function curl_get_file_size($url)
 {
   // Assume failure.
   $result = -1;
-
-  $timeStamp = time();
-  $url .= '?' . $timeStamp;
 
   $curl = curl_init($url);
 
