@@ -4,7 +4,7 @@
  *
  * @package      RKOCoreFunctionality
  * @author       Yuriy Lysyuk
- * @since        1.3.25
+ * @since        1.3.26
  **/
 
 /**
@@ -67,6 +67,14 @@ function curl_get_file_size($url)
   // Assume failure.
   $result = -1;
 
+  // Добавляем параметр с меткой времени (иначе с url без параметров скачет размер файлов Открытия)
+  $timeStamp = time();
+  $url = $url . '?' . $timeStamp;
+
+  // Устанавливаем useragent
+  $userAgent =
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.1 Safari/605.1.15';
+
   $curl = curl_init($url);
 
   // Issue a HEAD request and follow any redirects.
@@ -75,7 +83,7 @@ function curl_get_file_size($url)
   curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
   curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
   curl_setopt($curl, CURLOPT_FRESH_CONNECT, true);
-  // curl_setopt($curl, CURLOPT_USERAGENT, get_user_agent_string());
+  curl_setopt($curl, CURLOPT_USERAGENT, $userAgent);
 
   $data = curl_exec($curl);
   curl_close($curl);
