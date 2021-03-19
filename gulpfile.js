@@ -13,7 +13,7 @@ gulp.task("rko-scripts", function () {
       })
     ) // Убираем числовой код из файла
     .pipe(rename({ suffix: ".min" })) // Добавляем .min
-    .pipe(sourcemaps.write("./")) // Заканчиваем запись карты
+    // .pipe(sourcemaps.write("./")) // Заканчиваем запись карты
     .pipe(gulp.dest("rko-calc/assets/js")); // Выгружаем в папку
 });
 
