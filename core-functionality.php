@@ -1,20 +1,21 @@
 <?php
+
 /**
  * Plugin Name: RKO Core Functionality
  * Description: This contains all your site's core functionality so that it is theme independent. <strong>It should always be activated</strong>.
- * Version:     1.3.28
+ * Version:     1.3.29
  * Author:     Yuriy Lysyuk
  * Bitbucket Plugin URI: https://bitbucket.org/lysyuk-y/rko-core-functionality
  *
  * @package    RKOCoreFunctionality
- * @since      1.3.28
+ * @since      1.3.29
  * @copyright  Copyright (c) 2019, Yuriy Lysyuk
  */
 
 defined('ABSPATH') || exit();
 
 // Версия плагина
-define('RKOCF_VER', '1.3.28');
+define('RKOCF_VER', '1.3.29');
 // Plugin directory
 define('YL_DIR', plugin_dir_path(__FILE__));
 // Plugin URL
@@ -38,16 +39,16 @@ require_once YL_DIR . '/rko-calc/rko-calc.php';
 register_activation_hook(__FILE__, 'activation_plugin');
 function activation_plugin()
 {
-  // Удаляем все ранее добавленные задания для проверки изменений тарифов РКО
-  wp_clear_scheduled_hook('rko_check_update_tariffs_doc');
-  // Добавляем задание для проверки изменений тарифов РКО дважды в день
-  wp_schedule_event(time(), 'twicedaily', 'rko_check_update_tariffs_doc');
+	// Удаляем все ранее добавленные задания для проверки изменений тарифов РКО
+	wp_clear_scheduled_hook('rko_check_update_tariffs_doc');
+	// Добавляем задание для проверки изменений тарифов РКО дважды в день
+	wp_schedule_event(time(), 'twicedaily', 'rko_check_update_tariffs_doc');
 }
 
 // Дейтвия при деактивации плагина
 register_deactivation_hook(__FILE__, 'deactivation_plugin');
 function deactivation_plugin()
 {
-  // Удаляем все ранее добавленные задания для проверки изменений тарифов РКО
-  wp_clear_scheduled_hook('rko_check_update_tariffs_doc');
+	// Удаляем все ранее добавленные задания для проверки изменений тарифов РКО
+	wp_clear_scheduled_hook('rko_check_update_tariffs_doc');
 }
