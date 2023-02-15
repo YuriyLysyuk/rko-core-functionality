@@ -5,11 +5,7 @@
  * Description: This contains all your site's core functionality so that it is theme independent. <strong>It should always be activated</strong>.
  * Version:     1.3.29
  * Author:     Yuriy Lysyuk
- * Bitbucket Plugin URI: https://bitbucket.org/lysyuk-y/rko-core-functionality
- *
- * @package    RKOCoreFunctionality
- * @since      1.3.29
- * @copyright  Copyright (c) 2019, Yuriy Lysyuk
+ * GitHub Theme URI: https://github.com/YuriyLysyuk/rko-core-functionality
  */
 
 defined('ABSPATH') || exit();
