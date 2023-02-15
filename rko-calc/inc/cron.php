@@ -12,13 +12,13 @@
 // ToDo: для срабатывания проверки заданий каждые 15 минут, если чаще никто не заходит
 
 // Проверка существования расписания во время работы плагина на всякий пожарный случай
-if (!wp_next_scheduled('rko_check_update_tariff_docs')) {
+// if (!wp_next_scheduled('rko_check_update_tariff_docs')) {
   // Добавляем задание для проверки изменений тарифов РКО дважды в день
-  wp_schedule_event(time(), 'twicedaily', 'rko_check_update_tariff_docs');
-}
+//   wp_schedule_event(time(), 'twicedaily', 'rko_check_update_tariff_docs');
+// }
 
 // Добавляем функцию запуска проверки
-add_action('rko_check_update_tariff_docs', "rko_do_check_update_tariff_docs");
+// add_action('rko_check_update_tariff_docs', "rko_do_check_update_tariff_docs");
 
 // Функция для загрузки и проверки изменений файлов с тарифами с сайтов банков
 function rko_do_check_update_tariff_docs()
