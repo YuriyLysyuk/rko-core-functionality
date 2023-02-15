@@ -12,13 +12,13 @@
 // ToDo: для срабатывания проверки заданий каждые 15 минут, если чаще никто не заходит
 
 // Проверка существования расписания во время работы плагина на всякий пожарный случай
-if (!wp_next_scheduled('rko_check_update_tariff_docs')) {
+// if (!wp_next_scheduled('rko_check_update_tariff_docs')) {
   // Добавляем задание для проверки изменений тарифов РКО дважды в день
-  wp_schedule_event(time(), 'twicedaily', 'rko_check_update_tariff_docs');
-}
+//   wp_schedule_event(time(), 'twicedaily', 'rko_check_update_tariff_docs');
+// }
 
 // Добавляем функцию запуска проверки
-add_action('rko_check_update_tariff_docs', "rko_do_check_update_tariff_docs");
+// add_action('rko_check_update_tariff_docs', "rko_do_check_update_tariff_docs");
 
 // Функция для загрузки и проверки изменений файлов с тарифами с сайтов банков
 function rko_do_check_update_tariff_docs()
@@ -30,6 +30,10 @@ function rko_do_check_update_tariff_docs()
 
   // Получаем данные каждого тарифа и конструируем ассоциативный массив
   $allTariffOptions = get_all_tariff_options();
+	
+  // Временная метка для ссылки на скачивание.
+  // Нужна что бы браузер не использовал кэшированный файл, так как имя файла одинаковое всегда.
+  $timeStamp = time();
 
   // Перебираем все тарифы
   foreach ($allTariffOptions as $tariffOptions) {
@@ -96,10 +100,6 @@ function rko_do_check_update_tariff_docs()
         $previousLocalFilename .= '.' . $doc['ext'];
         $currentLocalFilename .= '.' . $doc['ext'];
 
-        // Временная метка для ссылки на скачивание.
-        // Нужна что бы браузер не использовал кэшированный файл, так как имя файла одинаковое всегда.
-        $timeStamp = time();
-
         // Формируем начало вывода в виде идентификации строки
         $beginRowMessage = '<li>';
         $beginRowMessage .= $doc['structure']['label'] . ' ';
@@ -160,7 +160,7 @@ function rko_do_check_update_tariff_docs()
           // Файл с тарифом существует
 
           // Получаем размер файла с тарифом на сайте банка, в случае ошибки возвращает -1
-          $curlGetFileSize = curl_get_file_size($doc['url']);
+          $curlGetFileSize = curl_get_file_size($doc['url'], $timeStamp);
           // Проверяем размеры текущего локального тарифа и удаленного на сайте банка
           // и если они не совпадают
           if (
