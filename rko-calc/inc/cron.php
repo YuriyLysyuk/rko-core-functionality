@@ -30,6 +30,10 @@ function rko_do_check_update_tariff_docs()
 
   // Получаем данные каждого тарифа и конструируем ассоциативный массив
   $allTariffOptions = get_all_tariff_options();
+	
+  // Временная метка для ссылки на скачивание.
+  // Нужна что бы браузер не использовал кэшированный файл, так как имя файла одинаковое всегда.
+  $timeStamp = time();
 
   // Перебираем все тарифы
   foreach ($allTariffOptions as $tariffOptions) {
@@ -96,10 +100,6 @@ function rko_do_check_update_tariff_docs()
         $previousLocalFilename .= '.' . $doc['ext'];
         $currentLocalFilename .= '.' . $doc['ext'];
 
-        // Временная метка для ссылки на скачивание.
-        // Нужна что бы браузер не использовал кэшированный файл, так как имя файла одинаковое всегда.
-        $timeStamp = time();
-
         // Формируем начало вывода в виде идентификации строки
         $beginRowMessage = '<li>';
         $beginRowMessage .= $doc['structure']['label'] . ' ';
@@ -160,7 +160,7 @@ function rko_do_check_update_tariff_docs()
           // Файл с тарифом существует
 
           // Получаем размер файла с тарифом на сайте банка, в случае ошибки возвращает -1
-          $curlGetFileSize = curl_get_file_size($doc['url']);
+          $curlGetFileSize = curl_get_file_size($doc['url'], $timeStamp);
           // Проверяем размеры текущего локального тарифа и удаленного на сайте банка
           // и если они не совпадают
           if (
