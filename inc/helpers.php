@@ -62,14 +62,15 @@ function atomicWrite($filename, $data, $atomicSuffix = 'atomictmp')
  * @return The size of the file referenced by $url, or -1 if the size
  * could not be determined.
  */
-function curl_get_file_size($url)
+function curl_get_file_size($url, $timeStamp = false)
 {
   // Assume failure.
   $result = -1;
 
   // Добавляем параметр с меткой времени (иначе с url без параметров скачет размер файлов Открытия)
-  $timeStamp = time();
-  $url = $url . '?' . $timeStamp;
+  if ($timeStamp) {
+	$url = $url . '?' . $timeStamp;
+  }
 
   // Устанавливаем useragent
   $userAgent =
@@ -92,11 +93,11 @@ function curl_get_file_size($url)
     $content_length = "unknown";
     $status = "unknown";
 
-    if (preg_match("/^HTTP\/1\.[01] (\d\d\d)/", $data, $matches)) {
+     if (preg_match("/^HTTP\/[1-2]?\.? ?[01]? (\d\d\d)/", $data, $matches)) {
       $status = (int) $matches[1];
     }
 
-    if (preg_match("/Content-Length: (\d+)/", $data, $matches)) {
+    if (preg_match("/content-length: (\d+)/i", $data, $matches)) {
       $content_length = (int) $matches[1];
     }
 
