@@ -36,9 +36,9 @@ register_activation_hook(__FILE__, 'activation_plugin');
 function activation_plugin()
 {
 	// Удаляем все ранее добавленные задания для проверки изменений тарифов РКО
-	wp_clear_scheduled_hook('rko_check_update_tariffs_doc');
+	wp_clear_scheduled_hook('rko_check_update_tariff_docs');
 	// Добавляем задание для проверки изменений тарифов РКО дважды в день
-	wp_schedule_event(time(), 'twicedaily', 'rko_check_update_tariffs_doc');
+	wp_schedule_event(time(), 'twicedaily', 'rko_check_update_tariff_docs');
 }
 
 // Дейтвия при деактивации плагина
@@ -46,5 +46,5 @@ register_deactivation_hook(__FILE__, 'deactivation_plugin');
 function deactivation_plugin()
 {
 	// Удаляем все ранее добавленные задания для проверки изменений тарифов РКО
-	wp_clear_scheduled_hook('rko_check_update_tariffs_doc');
+	wp_clear_scheduled_hook('rko_check_update_tariff_docs');
 }
