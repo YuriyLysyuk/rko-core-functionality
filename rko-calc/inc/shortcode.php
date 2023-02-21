@@ -17,13 +17,26 @@ function rko_calc_shortcode($atts)
   $params = shortcode_atts(
     [
       'banks' => 'all', // Показывать тарифы всех банков
+      'registration' => '', // Форма регистрации
     ],
     $atts
   );
 
   // Проверяем наличие переменных в URL и используем их если есть
   $checkedIP = empty($_GET['ooo']) ? "checked" : "";
-  $checkedOOO = isset($_GET['ooo']) && $_GET['ooo'] == "1" ? "checked" : "";
+  $checkedOOO = ((isset($_GET['ooo']) && $_GET['ooo'] == "1") || ('ooo' === $params['registration'])) ? "checked" : "";
+
+  $ipRadioField = "<input type='radio' name='ooo' id='ip' $checkedIP value='0'><label for='ip'><span>ИП</span></label>";
+  $oooRadioField = "<input type='radio' name='ooo' id='ooo' $checkedOOO value='1'><label for='ooo'><span>ООО</span></label>";
+
+  $registrationFields = $ipRadioField . $oooRadioField;
+ 
+  if ('ip' === $params['registration']) {
+    $registrationFields = $ipRadioField;
+  } elseif (('ooo' === $params['registration'])) {
+    $registrationFields = $oooRadioField;
+  }
+
   $income = empty($_GET['income']) ? 0 : $_GET['income'];
   $payment_order = empty($_GET['payment_order']) ? 0 : $_GET['payment_order'];
   $people_transfer = empty($_GET['people_transfer'])
@@ -52,8 +65,7 @@ function rko_calc_shortcode($atts)
     <form id='rko-calc-form' class='rko-calc-form'>
       <label class='rko-calc-field-label'>Форма регистрации</label>
       <div class='switch-field'>
-      <input type='radio' name='ooo' id='ip' $checkedIP value='0'><label for='ip'><span>ИП</span></label>
-      <input type='radio' name='ooo' id='ooo' $checkedOOO value='1'><label for='ooo'><span>ООО</span></label>
+        $registrationFields
       </div>
       
       <div class='h5 every-month'>Ежемесячно</div>
