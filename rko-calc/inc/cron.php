@@ -21,8 +21,14 @@
 // add_action('rko_check_update_tariff_docs', "rko_do_check_update_tariff_docs");
 
 // Функция для загрузки и проверки изменений файлов с тарифами с сайтов банков
-function rko_do_check_update_tariff_docs()
+function rko_do_check_update_tariff_docs( $atts )
 {
+  // Обрабатываем атрибуты шорткода
+  $atts = shortcode_atts( array(
+    'debug' => 'false',
+    'bank' => ''
+  ), $atts );
+
   // Полный отчет по изменениям
   $message = "";
   // Обнуляем флаг изменений
@@ -30,13 +36,18 @@ function rko_do_check_update_tariff_docs()
 
   // Получаем данные каждого тарифа и конструируем ассоциативный массив
   $allTariffOptions = get_all_tariff_options();
-	
+
   // Временная метка для ссылки на скачивание.
   // Нужна что бы браузер не использовал кэшированный файл, так как имя файла одинаковое всегда.
   $timeStamp = time();
 
   // Перебираем все тарифы
   foreach ($allTariffOptions as $tariffOptions) {
+    // Если в шорткоде указан банк и он не текущий — пропускаем итерацию
+    if (!empty($atts['bank']) && $atts['bank'] !== $tariffOptions['bank']['slug']) {
+      continue; 
+    }
+
     // Обнуляем флаг изменений в отдельном тарифу
     $haveRowChanges = false;
     // Обнуляем отдельный отчет по изменениям для одного тарифа
@@ -269,6 +280,12 @@ function rko_do_check_update_tariff_docs()
   if (!$haveChanges) {
     $subject = 'Отчет по изменениям в тарифах';
     $message = '<p>Изменений нет. Займись чем-нибудь интересным :)</p>';
+  }
+
+  // Если находимся в цикле (запущен шорткод на странице)
+  if ( "true" === $atts['debug'] ) {
+    // Выводим сообщение на страницу
+    return $message;
   }
 
   // Устанавливаем html формат письма
